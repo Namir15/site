@@ -938,3 +938,246 @@ footer {
     background: #2A2D43;
     color: white;
 }
+
+/* ===== VISUALIZADOR DE ACORDES ===== */
+
+.chord-visualizer {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 2px solid var(--primary);
+    box-shadow: var(--shadow);
+}
+
+.visualizer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.chord-name-display {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.fret-info {
+    background: var(--primary);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.guitar-neck {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: #8B4513;
+    border-radius: 10px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.fret-markers {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.fret-marker {
+    width: 25px;
+    height: 25px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: white;
+    font-weight: bold;
+}
+
+.guitar-fretboard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.frets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.fret-line {
+    position: absolute;
+    height: 100%;
+    width: 3px;
+    background: linear-gradient(to right, #ddd, #fff, #ddd);
+}
+
+.fret-0 { left: 10%; }
+.fret-1 { left: 25%; }
+.fret-2 { left: 40%; }
+.fret-3 { left: 55%; }
+.fret-4 { left: 70%; }
+.fret-5 { left: 85%; }
+
+.strings {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.string {
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 10%, 
+        #f0f0f0 10%, 
+        #f0f0f0 90%, 
+        transparent 90%);
+    position: relative;
+}
+
+.open-strings {
+    position: absolute;
+    left: 2%;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    z-index: 2;
+}
+
+.open-string {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--dark);
+}
+
+.fingers-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+}
+
+.finger {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.finger.finger-1 { background: var(--primary); }
+.finger.finger-2 { background: var(--secondary); }
+.finger.finger-3 { background: var(--accent); }
+.finger.finger-4 { background: var(--success); }
+
+.muted-strings {
+    position: absolute;
+    right: 2%;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    z-index: 2;
+}
+
+.muted-string {
+    width: 20px;
+    height: 20px;
+    background: rgba(244, 67, 54, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: white;
+    font-weight: bold;
+}
+
+.chord-feedback {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.chord-hint {
+    padding: 10px;
+    border-radius: var(--border-radius);
+    background: #f8f9fa;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.outline-btn {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.outline-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Animações */
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Modo escuro */
+.dark-mode .chord-visualizer {
+    background: #2A2D43;
+    border-color: var(--accent);
+}
+
+.dark-mode .chord-hint {
+    background: #3A3D53;
+    color: var(--text-light);
+}

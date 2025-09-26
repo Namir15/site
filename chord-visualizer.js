@@ -1,4 +1,237 @@
-// Conteúdo chord-visualizer.js fornecido anteriormente// chord-visualizer.js - Visualizador Interativo de Acordes
+// chord-visualizer.js - Visualizador Interativo de Acordes para Violão
+
+class ChordVisualizer {
+    constructor() {
+        this.chordLibrary = {
+            'C-correct': {
+                name: 'Dó Maior (C)',
+                baseFret: 1,
+                fingers: [
+                    { string: 5, fret: 3, finger: 3 },
+                    { string: 4, fret: 2, finger: 2 },
+                    { string: 2, fret: 1, finger: 1 }
+                ],
+                muted: [6],
+                open: [1, 3]
+            },
+            'C-wrong1': {
+                name: 'Posição Incorreta',
+                baseFret: 2,
+                fingers: [
+                    { string: 4, fret: 2, finger: 1 },
+                    { string: 3, fret: 2, finger: 2 },
+                    { string: 2, fret: 2, finger: 3 }
+                ],
+                muted: [6, 1],
+                open: [5]
+            },
+            'C-wrong2': {
+                name: 'Posição Incorreta',
+                baseFret: 1,
+                fingers: [
+                    { string: 6, fret: 1, finger: 1 },
+                    { string: 5, fret: 1, finger: 2 },
+                    { string: 4, fret: 1, finger: 3 },
+                    { string: 3, fret: 1, finger: 4 }
+                ],
+                muted: [],
+                open: [2, 1]
+            },
+            'C-wrong3': {
+                name: 'Posição Incorreta',
+                baseFret: 3,
+                fingers: [
+                    { string: 5, fret: 3, finger: 1 }
+                ],
+                muted: [6, 4, 3, 2, 1],
+                open: []
+            }
+        };
+        
+        this.selectedOption = null;
+        this.answerConfirmed = false;
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.addStyles();
+    }
+
+    setupEventListeners() {
+        const options = document.querySelectorAll('#quizTab .option');
+        const changeAnswerBtn = document.getElementById('changeAnswer');
+        const confirmBtn = document.getElementById('confirmQuiz');
+
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                if (this.answerConfirmed) return;
+                
+                options.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                
+                this.selectedOption = option;
+                const chordKey = option.getAttribute('data-chord');
+                
+                this.displayChord(chordKey);
+                
+                changeAnswerBtn.style.display = 'inline-block';
+            });
+        });
+
+        changeAnswerBtn?.addEventListener('click', () => {
+            this.answerConfirmed = false;
+            this.selectedOption = null;
+            options.forEach(opt => opt.classList.remove('selected'));
+            changeAnswerBtn.style.display = 'none';
+            confirmBtn.disabled = false;
+            this.clearChordDisplay();
+            this.updateHint('Selecione uma opção para visualizar o acorde');
+        });
+
+        confirmBtn?.addEventListener('click', () => {
+            this.confirmAnswer();
+        });
+    }
+
+    confirmAnswer() {
+        if (!this.selectedOption) {
+            alert('Por favor, selecione uma opção antes de confirmar.');
+            return;
+        }
+        
+        this.answerConfirmed = true;
+        const isCorrect = this.selectedOption.getAttribute('data-correct') === 'true';
+        const options = document.querySelectorAll('#quizTab .option');
+        const confirmBtn = document.getElementById('confirmQuiz');
+        const changeAnswerBtn = document.getElementById('changeAnswer');
+
+        if (isCorrect) {
+            this.selectedOption.style.borderColor = 'var(--success)';
+            this.selectedOption.style.background = 'rgba(76, 175, 80, 0.1)';
+            this.updateHint('✅ Correto! Esta é a digitação do acorde de Dó Maior.', 'success');
+            this.animateCorrectChord();
+        } else {
+            this.selectedOption.style.borderColor = 'var(--danger)';
+            this.selectedOption.style.background = 'rgba(244, 67, 54, 0.1)';
+            this.updateHint('❌ Incorreto. Veja a digitação correta:', 'error');
+            
+            setTimeout(() => {
+                this.displayChord('C-correct', true);
+            }, 1000);
+        }
+
+        options.forEach(opt => {
+            opt.style.pointerEvents = 'none';
+        });
+
+        confirmBtn.disabled = true;
+        changeAnswerBtn.style.display = 'none';
+    }
+
+    displayChord(chordKey, isCorrectAnswer = false) {
+        const chord = this.chordLibrary[chordKey];
+        if (!chord) return;
+        
+        const fingersContainer = document.getElementById('fingersContainer');
+        const mutedStringsContainer = document.getElementById('mutedStrings');
+        
+        fingersContainer.innerHTML = '';
+        mutedStringsContainer.innerHTML = '';
+        
+        document.getElementById('currentChordName').textContent = chord.name;
+        document.getElementById('currentFret').textContent = chord.baseFret;
+        
+        chord.fingers.forEach(fingerPos => {
+            const fingerElement = document.createElement('div');
+            fingerElement.className = `finger finger-${fingerPos.finger}`;
+            fingerElement.textContent = fingerPos.finger;
+            
+            const stringPosition = this.getStringPosition(fingerPos.string);
+            const fretPosition = this.getFretPosition(fingerPos.fret - chord.baseFret + 1);
+            
+            fingerElement.style.left = `${fretPosition}%`;
+            fingerElement.style.top = `${stringPosition}%`;
+            
+            if (isCorrectAnswer) {
+                fingerElement.style.animation = 'chordPulse 0.5s ease-in-out';
+            }
+            
+            fingersContainer.appendChild(fingerElement);
+        });
+        
+        chord.muted.forEach(stringNum => {
+            const mutedElement = document.createElement('div');
+            mutedElement.className = 'muted-string';
+            mutedElement.textContent = 'X';
+            mutedElement.style.order = 7 - stringNum;
+            mutedStringsContainer.appendChild(mutedElement);
+        });
+        
+        if (!isCorrectAnswer) {
+            this.updateHint(`Visualizando: ${chord.fingers.length} dedo(s) na casa ${chord.baseFret}`);
+        }
+    }
+
+    clearChordDisplay() {
+        document.getElementById('fingersContainer').innerHTML = '';
+        document.getElementById('mutedStrings').innerHTML = '';
+        document.getElementById('currentChordName').textContent = '-';
+        document.getElementById('currentFret').textContent = '-';
+        this.updateHint('Selecione uma opção para visualizar o acorde');
+    }
+
+    animateCorrectChord() {
+        const fingers = document.querySelectorAll('.finger');
+        fingers.forEach((finger, index) => {
+            finger.style.animationDelay = `${index * 0.2}s`;
+            finger.style.animation = 'chordBounce 0.5s ease-in-out';
+        });
+    }
+
+    updateHint(message, type = '') {
+        const hintElement = document.getElementById('chordHint');
+        hintElement.textContent = message;
+        hintElement.style.color = type === 'success' ? 'var(--success)' : 
+                                type === 'error' ? 'var(--danger)' : '';
+    }
+
+    getStringPosition(stringNum) {
+        return (stringNum - 0.5) * (100 / 6);
+    }
+
+    getFretPosition(fretOffset) {
+        const fretPositions = [10, 25, 40, 55, 70, 85];
+        return fretPositions[fretOffset] || 50;
+    }
+
+    addStyles() {
+        if (document.getElementById('chord-visualizer-styles')) return;
+        
+        const styles = `
+            @keyframes chordBounce {
+                0%, 100% { transform: translate(-50%, -50%) scale(1); }
+                50% { transform: translate(-50%, -50%) scale(1.2); }
+            }
+            
+            @keyframes chordPulse {
+                0% { transform: translate(-50%, -50%) scale(1); }
+                50% { transform: translate(-50%, -50%) scale(1.1); }
+                100% { transform: translate(-50%, -50%) scale(1); }
+            }
+        `;
+        
+        const styleElement = document.createElement('style');
+        styleElement.id = 'chord-visualizer-styles';
+        styleElement.textContent = styles;
+        document.head.appendChild(styleElement);
+    }
+}
+
+// Inicialização automática quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    new ChordVisualizer();
+});// chord-visualizer.js - Visualizador Interativo de Acordes
 
 // Dicionário de acordes para o quiz
 const chordLibrary = {

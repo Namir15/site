@@ -1,4 +1,4 @@
-// Conteúdo JS completo fornecido anteriormente// app.js - Funcionalidades principais do Violão Pro
+// app.js - Funcionalidades principais do Violão Pro
 
 // Theme toggle functionality
 document.addEventListener('DOMContentLoaded', function() {
