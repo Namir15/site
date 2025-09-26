@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violão Pro - Aprenda Violão de Forma Divertida</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icons/icon-72x72.png">
+    <meta name="theme-color" content="#6C63FF">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-guitar"></i>
+                    <span>Violão Pro</span>
+                </div>
+                <div class="user-actions">
+                    <button class="icon-btn" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="icon-btn" id="notificationsBtn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="icon-btn" id="profileBtn">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="progress-section">
+                <div class="progress-header">
+                    <h2 class="section-title">Meu Progresso no Violão</h2>
+                    <div class="streak">
+                        <i class="fas fa-fire"></i>
+                        <span id="streakDays">5 dias seguidos</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="progress-info">
+                    <span id="progressPercent">45% completo</span>
+                    <span>Próxima conquista: Solista</span>
+                </div>
+                <div class="badges-container">
+                    <div class="badge earned">
+                        <i class="fas fa-guitar"></i>
+                        <span>Iniciante</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-music"></i>
+                        <span>Ritmista</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-star"></i>
+                        <span>Solista</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="modules-section">
+                <h2 class="section-title">Aulas de Violão</h2>
+                <div class="modules-container">
+                    <div class="module-card">
+                        <div class="module-image" style="background-image: url('assets/images/module-cords.jpg');">
+                            <div class="module-tag">NOVO</div>
+                        </div>
+                        <div class="module-content">
+                            <h3 class="module-title">Conhecendo o Violão</h3>
+                            <p class="module-description">Partes do violão, afinação, postura correta.</p>
+                            <div class="module-progress">
+                                <div class="module-stats">
+                                    <span><i class="fas fa-play-circle"></i> 3/5 aulas</span>
+                                    <span><i class="fas fa-star"></i> 80 pts</span>
+                                </div>
+                                <button class="start-btn">Continuar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="module-card">
+                        <div class="module-image" style="background-image: url('assets/images/module-chords.jpg');">
+                            <div class="module-tag">POPULAR</div>
+                        </div>
+                        <div class="module-content">
+                            <h3 class="module-title">Acordes Básicos</h3>
+                            <p class="module-description">C, G, D, Am, Em - os acordes essenciais.</p>
+                            <div class="module-progress">
+                                <div class="module-stats">
+                                    <span><i class="fas fa-play-circle"></i> 5/8 aulas</span>
+                                    <span><i class="fas fa-star"></i> 150 pts</span>
+                                </div>
+                                <button class="start-btn">Continuar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="module-card">
+                        <div class="module-image" style="background-image: url('assets/images/module-songs.jpg');">
+                            <div class="module-tag">EM BREVE</div>
+                        </div>
+                        <div class="module-content">
+                            <h3 class="module-title">Primeiras Músicas</h3>
+                            <p class="module-description">Aprenda músicas simples e divertidas.</p>
+                            <div class="module-progress">
+                                <div class="module-stats">
+                                    <span><i class="fas fa-play-circle"></i> 0/6 aulas</span>
+                                    <span><i class="fas fa-star"></i> 0 pts</span>
+                                </div>
+                                <button class="start-btn" disabled>Em Breve</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="video-section">
+                <h2 class="section-title">Aula em Destaque: Acorde de Dó Maior (C)</h2>
+                <div class="video-container">
+                    <div class="video-player">
+                        <i class="fas fa-play-circle" id="playButton"></i>
+                    </div>
+                </div>
+                <div class="video-controls">
+                    <div class="control-group">
+                        <button class="control-btn" id="fullscreenBtn">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button class="control-btn" id="volumeBtn">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div class="speed-control">
+                        <span>Velocidade:</span>
+                        <select id="speedSelect">
+                            <option value="0.5">0.5x</option>
+                            <option value="1" selected>1x</option>
+                            <option value="1.5">1.5x</option>
+                            <option value="2">2x</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="exercises-section">
+                <div class="exercise-tabs">
+                    <div class="tab active" data-tab="quiz">Quiz de Teoria</div>
+                    <div class="tab" data-tab="challenge">Desafio de Acordes</div>
+                    <div class="tab" data-tab="revision">Revisão Espaçada</div>
+                </div>
+                <div class="exercise-content">
+                    <div class="quiz-container active" id="quizTab">
+                        <div class="quiz-question">
+                            Qual é a digitação correta para o acorde de Dó Maior (C)?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="option" data-correct="false">
+                                <span class="option-letter">A</span>
+                                <span class="option-text">Dedos 1, 2 e 3 na 2ª casa</span>
+                            </div>
+                            <div class="option" data-correct="true">
+                                <span class="option-letter">B</span>
+                                <span class="option-text">Dedo 1 na 2ª casa, corda 4; Dedo 2 na 2ª casa, corda 2; Dedo 3 na 3ª casa, corda 5</span>
+                            </div>
+                            <div class="option" data-correct="false">
+                                <span class="option-letter">C</span>
+                                <span class="option-text">Todos os dedos na 1ª casa</span>
+                            </div>
+                            <div class="option" data-correct="false">
+                                <span class="option-letter">D</span>
+                                <span class="option-text">Apenas o dedo 1 na 3ª casa, corda 5</span>
+                            </div>
+                        </div>
+                        <div class="exercise-actions">
+                            <button class="action-btn secondary-btn" id="skipQuiz">Pular</button>
+                            <button class="action-btn primary-btn" id="confirmQuiz">Confirmar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-container" id="challengeTab">
+                        <div class="challenge-instruction">
+                            <p>Toque o acorde de Lá menor (Am) no tempo indicado:</p>
+                            <div class="metronome">
+                                <div class="metronome-beat active"></div>
+                                <div class="metronome-beat"></div>
+                                <div class="metronome-beat"></div>
+                                <div class="metronome-beat"></div>
+                            </div>
+                        </div>
+                        <div class="chord-diagram">
+                            <div class="chord-fretboard">
+                                <div class="chord-strings">
+                                    <div class="string"></div>
+                                    <div class="string"></div>
+                                    <div class="string"></div>
+                                    <div class="string"></div>
+                                    <div class="string"></div>
+                                    <div class="string"></div>
+                                </div>
+                                <div class="chord-frets">
+                                    <div class="fret"></div>
+                                    <div class="fret"></div>
+                                    <div class="fret"></div>
+                                </div>
+                                <div class="chord-fingers">
+                                    <div class="finger" style="top: 30px; left: 40px;">1</div>
+                                    <div class="finger" style="top: 30px; left: 110px;">2</div>
+                                    <div class="finger" style="top: 30px; left: 180px;">3</div>
+                                </div>
+                            </div>
+                            <div class="chord-name">Lá menor (Am)</div>
+                        </div>
+                        <div class="exercise-actions">
+                            <button class="action-btn secondary-btn" id="startChallenge">Iniciar Desafio</button>
+                            <button class="action-btn primary-btn" id="submitChallenge" disabled>Enviar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="revision-container" id="revisionTab">
+                        <div class="revision-info">
+                            <h3>Revisão de Acordes</h3>
+                            <p>Próxima revisão: <span id="nextRevision">Amanhã</span></p>
+                            <div class="revision-cards">
+                                <div class="revision-card">
+                                    <div class="chord-mini">C</div>
+                                    <span>Dó Maior</span>
+                                    <div class="revision-due tomorrow">Amanhã</div>
+                                </div>
+                                <div class="revision-card">
+                                    <div class="chord-mini">G</div>
+                                    <span>Sol Maior</span>
+                                    <div class="revision-due today">Hoje</div>
+                                </div>
+                                <div class="revision-card">
+                                    <div class="chord-mini">Am</div>
+                                    <span>Lá menor</span>
+                                    <div class="revision-due overdue">Atrasado</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="exercise-actions">
+                            <button class="action-btn primary-btn" id="startRevision">Iniciar Revisão</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="recording-section">
+                <div class="recording-header">
+                    <h2 class="section-title">Grave seu Exercício</h2>
+                    <span>Máx: 60 segundos</span>
+                </div>
+                <div class="recording-instruction">
+                    <p>Toque a progressão: C - G - Am - F</p>
+                </div>
+                <div class="timer" id="recordingTimer">00:00</div>
+                <div class="recording-controls">
+                    <button class="record-btn" id="recordButton">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <div class="recording-visualizer">
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                </div>
+                <div class="exercise-actions">
+                    <button class="action-btn secondary-btn" id="playRecording" disabled>Ouvir Gravação</button>
+                    <button class="action-btn primary-btn" id="submitRecording" disabled>Enviar</button>
+                </div>
+            </section>
+
+            <section class="resources-section">
+                <h2 class="section-title">Materiais de Apoio</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3 class="resource-title">Acordes Básicos</h3>
+                        <p class="resource-desc">PDF com diagramas de acordes</p>
+                        <button class="download-btn">
+                            <i class="fas fa-download"></i> Baixar
+                        </button>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3 class="resource-title">Tablaturas</h3>
+                        <p class="resource-desc">Músicas para praticar</p>
+                        <button class="download-btn">
+                            <i class="fas fa-download"></i> Baixar
+                        </button>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="resource-title">Seu Progresso</h3>
+                        <p class="resource-desc">Relatório detalhado</p>
+                        <button class="download-btn">
+                            <i class="fas fa-share-alt"></i> Compartilhar
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Violão Pro</h3>
+                    <p>Aprenda violão de forma divertida e eficaz.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Links Rápidos</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Aulas</a>
+                        <a href="#" class="footer-link">Exercícios</a>
+                        <a href="#" class="footer-link">Conquistas</a>
+                        <a href="#" class="footer-link">Configurações</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Baixe o App</h3>
+                    <p>Disponível para iOS e Android</p>
+                    <button class="install-btn" id="installButton">
+                        <i class="fas fa-download"></i> Instalar App
+                    </button>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Violão Pro. Todos os direitos reservados.
+            </div>
+        </footer>
+    </div>
+
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-header">
+            <h3>Instalar Violão Pro</h3>
+            <button class="close-prompt" id="closePrompt">&times;</button>
+        </div>
+        <p>Instale nosso app para uma experiência melhor, mesmo offline!</p>
+        <button class="install-btn" id="installAppButton">Instalar</button>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/recorder.js"></script>
+    <script src="js/pwa.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
