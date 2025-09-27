@@ -1181,3 +1181,45 @@ footer {
     background: #3A3D53;
     color: var(--text-light);
 }
+
+/* Animações para as notificações */
+@keyframes slideIn {
+    from { 
+        transform: translateX(100%); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateX(0); 
+        opacity: 1; 
+    }
+}
+
+/* Melhorias para o visualizador de acordes */
+.finger {
+    transition: all 0.3s ease;
+}
+
+.finger:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Efeitos de loading */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Melhorias na responsividade */
+@media (max-width: 768px) {
+    .chord-visualizer {
+        padding: 1rem;
+    }
+    
+    .guitar-neck {
+        height: 180px;
+    }
+    
+    .fret-markers {
+        padding: 0 5%;
+    }
+}

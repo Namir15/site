@@ -144,175 +144,43 @@
                         </select>
                     </div>
                 </div>
-            </section>
+            </section>                                                                                                                                 
 
             <section class="exercises-section">
                 <div class="exercise-tabs">
                     <div class="tab active" data-tab="quiz">Quiz de Acordes</div>
-                    <div class="tab" data-tab="challenge">Desafio de Acordes</div>
-                    <div class="tab" data-tab="revision">Revisão Espaçada</div>
+                    
                 </div>
                 
                 <div class="exercise-content">
                     <div class="quiz-container active" id="quizTab">
                         <div class="quiz-header">
-                            <div class="quiz-question">
-                                <h3>Qual é a digitação correta para o acorde de Dó Maior (C)?</h3>
-                                <p>Selecione uma opção e veja a digitação no violão</p>
-                            </div>
-                            
-                            <div class="chord-visualizer">
-                                <div class="visualizer-header">
-                                    <span class="chord-name-display">Acorde: <strong id="currentChordName">-</strong></span>
-                                    <div class="fret-info">Casa: <span id="currentFret">-</span></div>
-                                </div>
-                                
-                                <div class="guitar-neck">
-                                    <div class="fret-markers">
-                                        <div class="fret-marker" data-fret="3">III</div>
-                                        <div class="fret-marker" data-fret="5">V</div>
-                                        <div class="fret-marker" data-fret="7">VII</div>
-                                        <div class="fret-marker" data-fret="9">IX</div>
-                                    </div>
-                                    
-                                    <div class="guitar-fretboard">
-                                        <div class="frets">
-                                            <div class="fret-line fret-0"></div>
-                                            <div class="fret-line fret-1"></div>
-                                            <div class="fret-line fret-2"></div>
-                                            <div class="fret-line fret-3"></div>
-                                            <div class="fret-line fret-4"></div>
-                                            <div class="fret-line fret-5"></div>
-                                        </div>
-                                        
-                                        <div class="strings">
-                                            <div class="string" data-string="1"></div>
-                                            <div class="string" data-string="2"></div>
-                                            <div class="string" data-string="3"></div>
-                                            <div class="string" data-string="4"></div>
-                                            <div class="string" data-string="5"></div>
-                                            <div class="string" data-string="6"></div>
-                                        </div>
-                                        
-                                        <div class="open-strings">
-                                            <div class="open-string" data-string="1">E</div>
-                                            <div class="open-string" data-string="2">B</div>
-                                            <div class="open-string" data-string="3">G</div>
-                                            <div class="open-string" data-string="4">D</div>
-                                            <div class="open-string" data-string="5">A</div>
-                                            <div class="open-string" data-string="6">E</div>
-                                        </div>
-                                        
-                                        <div class="fingers-container" id="fingersContainer"></div>
-                                        <div class="muted-strings" id="mutedStrings"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="chord-feedback">
-                                    <div id="chordHint" class="chord-hint">Selecione uma opção para visualizar o acorde</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="quiz-options">
-                            <div class="option" data-correct="false" data-chord="C-wrong1">
-                                <span class="option-letter">A</span>
-                                <span class="option-text">Dedos 1, 2 e 3 na 2ª casa</span>
-                            </div>
-                            <div class="option" data-correct="true" data-chord="C-correct">
-                                <span class="option-letter">B</span>
-                                <span class="option-text">Dedo 1 na 2ª casa, corda 4; Dedo 2 na 2ª casa, corda 2; Dedo 3 na 3ª casa, corda 5</span>
-                            </div>
-                            <div class="option" data-correct="false" data-chord="C-wrong2">
-                                <span class="option-letter">C</span>
-                                <span class="option-text">Todos os dedos na 1ª casa</span>
-                            </div>
-                            <div class="option" data-correct="false" data-chord="C-wrong3">
-                                <span class="option-letter">D</span>
-                                <span class="option-text">Apenas o dedo 1 na 3ª casa, corda 5</span>
-                            </div>
-                        </div>
-                        
-                        <div class="exercise-actions">
-                            <button class="action-btn secondary-btn" id="skipQuiz">Pular</button>
-                            <button class="action-btn primary-btn" id="confirmQuiz">Confirmar Resposta</button>
-                            <button class="action-btn outline-btn" id="changeAnswer" style="display: none;">Alterar Resposta</button>
-                        </div>
-                    </div>
-                    
-                    <div class="challenge-container" id="challengeTab">
-                        <div class="challenge-instruction">
-                            <p>Toque o acorde de Lá menor (Am) no tempo indicado:</p>
-                            <div class="metronome">
-                                <div class="metronome-beat active"></div>
-                                <div class="metronome-beat"></div>
-                                <div class="metronome-beat"></div>
-                                <div class="metronome-beat"></div>
-                            </div>
-                        </div>
-                        <div class="exercise-actions">
-                            <button class="action-btn secondary-btn" id="startChallenge">Iniciar Desafio</button>
-                            <button class="action-btn primary-btn" id="submitChallenge" disabled>Enviar</button>
-                        </div>
-                    </div>
-                    
-                    <div class="revision-container" id="revisionTab">
-                        <div class="revision-info">
-                            <h3>Revisão de Acordes</h3>
-                            <p>Próxima revisão: <span id="nextRevision">Amanhã</span></p>
-                            <div class="revision-cards">
-                                <div class="revision-card">
-                                    <div class="chord-mini">C</div>
-                                    <span>Dó Maior</span>
-                                    <div class="revision-due tomorrow">Amanhã</div>
-                                </div>
-                                <div class="revision-card">
-                                    <div class="chord-mini">G</div>
-                                    <span>Sol Maior</span>
-                                    <div class="revision-due today">Hoje</div>
-                                </div>
-                                <div class="revision-card">
-                                    <div class="chord-mini">Am</div>
-                                    <span>Lá menor</span>
-                                    <div class="revision-due overdue">Atrasado</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="exercise-actions">
-                            <button class="action-btn primary-btn" id="startRevision">Iniciar Revisão</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                            <!-- Seção do Quiz -->
+    <section id="quiz-section">
+      <h2>Quiz de Acordes</h2>
+      <p id="quiz-instruction">Qual é o acorde mostrado?</p>
 
-            <section class="recording-section">
-                <div class="recording-header">
-                    <h2 class="section-title">Grave seu Exercício</h2>
-                    <span>Máx: 60 segundos</span>
-                </div>
-                <div class="recording-instruction">
-                    <p>Toque a progressão: C - G - Am - F</p>
-                </div>
-                <div class="timer" id="recordingTimer">00:00</div>
-                <div class="recording-controls">
-                    <button class="record-btn" id="recordButton">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                </div>
-                <div class="recording-visualizer">
-                    <div class="visualizer-bar"></div>
-                    <div class="visualizer-bar"></div>
-                    <div class="visualizer-bar"></div>
-                    <div class="visualizer-bar"></div>
-                    <div class="visualizer-bar"></div>
-                    <div class="visualizer-bar"></div>
-                    <div class="visualizer-bar"></div>
-                    <div class="visualizer-bar"></div>
-                </div>
-                <div class="exercise-actions">
-                    <button class="action-btn secondary-btn" id="playRecording" disabled>Ouvir Gravação</button>
-                    <button class="action-btn primary-btn" id="submitRecording" disabled>Enviar</button>
-                </div>
+      <div id="quiz-container">
+        <div id="quiz-chord-visualizer"></div>
+        <div id="quiz-options"></div>
+      </div>
+
+      <button id="new-quiz-btn">Novo Quiz</button>
+      <p id="quiz-feedback"></p>
+    </section>
+
+    <!-- Visualizador de Acordes -->
+    <section id="chord-section">
+      <h2>Visualizador de Acordes</h2>
+      <select id="chord-select"></select>
+      <div id="chord-visualizer"></div>
+    </section>
+                                         
+                    
+                    
+                        
+                
+                
             </section>
 
             <section class="resources-section">
