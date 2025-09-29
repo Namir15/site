@@ -1264,3 +1264,581 @@ footer {
   r: 10;
   filter: drop-shadow(1px 1px 3px rgba(0,0,0,0.4));
 }
+
+
+/* Scale Visualizer Styles - Cordas de Baixo para Cima */
+
+/* Scale Visualizer Styles - Cordas de Baixo para Cima */
+.scale-section {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.scale-controls {
+    margin-bottom: 20px;
+}
+
+.scale-controls h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    align-items: end;
+}
+
+.control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control-item label {
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.control-item select {
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.scale-btn {
+    padding: 10px 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.scale-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.scale-fretboard-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow-x: auto;
+    background: #8b451300;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 3px solid #5d403700;
+    padding-left: 50px; /* Espaço para os labels das cordas */
+}
+
+.scale-fretboard {
+    position: relative;
+    height: 100%;
+    min-width: 800px;
+}
+
+/* Labels das cordas na lateral esquerda */
+/* Scale Visualizer Styles */
+.scale-section {
+    background: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.scale-controls {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f0f0f000;
+    border-radius: 5px;
+}
+
+.scale-controls select, .scale-controls button {
+    padding: 8px 12px;
+    margin: 5px;
+    font-size: 14px;
+    border: 1px solid #0c71e41a;
+    border-radius: 4px;
+}
+
+.scale-controls button {
+    background: #007bff86;
+    color: rgba(46, 6, 6, 0.842);
+    cursor: pointer;
+}
+
+.scale-controls button:hover {
+    background: #0057b300;
+}
+
+.fretboard-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow-x: auto;
+    border: 2px solid #333;
+    background: #8b4513;
+    margin: 20px 0;
+}
+
+.fretboard {
+    position: relative;
+    height: 100%;
+    min-width: 2000px;
+}
+
+.scale-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.fret-number {
+    position: absolute;
+    top: -25px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333333e8;
+}
+
+.note-label {
+    position: absolute;
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    width: 30px;
+    margin-left: -15px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 3px;
+    padding: 2px;
+    z-index: 2;
+}
+
+
+
+.scale-dot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    opacity: 0.7;
+    border: 2px solid rgba(17, 236, 170, 0.486);
+}
+
+.scale-dot.tonic { background: rgba(255, 0, 0, 0.7); }
+.scale-dot.second { background: rgba(255, 165, 0, 0.7); }
+.scale-dot.third { background: rgba(255, 255, 0, 0.7); }
+.scale-dot.fourth { background: rgba(0, 255, 0, 0.7); }
+.scale-dot.fifth { background: rgba(0, 0, 255, 0.7); }
+.scale-dot.sixth { background: rgba(75, 0, 130, 0.7); }
+.scale-dot.seventh { background: rgba(238, 130, 238, 0.7); }
+
+.scale-legend {
+    margin-top: 20px;
+    padding: 15px;
+    background: #290d2279;
+    border-radius: 5px;
+}
+
+.legend-items {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Adicione isso ao seu style.css */
+/* =======================
+   SCALE VISUALIZER - PADRONIZADO
+======================= */
+.scale-section {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow);
+}
+
+.scale-controls {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(108, 99, 255, 0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(108, 99, 255, 0.1);
+}
+
+.control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+.control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-item label {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 0.9rem;
+}
+
+.control-item select {
+    padding: 0.75rem;
+    border: 2px solid rgba(108, 99, 255, 0.2);
+    border-radius: var(--border-radius);
+    background: white;
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.control-item select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.modern-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.modern-btn:hover {
+    background: #5a52e0;
+    transform: translateY(-2px);
+}
+
+.fretboard-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow-x: auto;
+    border: 2px solid var(--dark);
+    background: #8B4513;
+    margin: 1.5rem 0;
+    border-radius: var(--border-radius);
+    padding-left: 60px;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.fretboard {
+    position: relative;
+    height: 100%;
+    min-width: 800px;
+}
+
+.scale-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* String Labels */
+.string-labels {
+    position: absolute;
+    left: -50px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 5;
+}
+
+.string-label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+    background: var(--primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    min-width: 45px;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* Open String Labels */
+.open-string-label {
+    position: absolute;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--warning);
+    background: rgba(0,0,0,0.8);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-align: center;
+    min-width: 25px;
+    z-index: 3;
+    border: 1px solid var(--warning);
+    transform: translateY(-50%);
+}
+
+/* Fret Numbers */
+.fret-number {
+    position: absolute;
+    top: -30px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    background: var(--dark);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-align: center;
+    width: 25px;
+    margin-left: -12.5px;
+    z-index: 3;
+}
+
+/* Note Labels */
+.note-label {
+    position: absolute;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: var(--text);
+    text-align: center;
+    width: 25px;
+    margin-left: -12.5px;
+    background: var(--light);
+    border-radius: 3px;
+    padding: 0.15rem 0.25rem;
+    z-index: 2;
+    border: 1px solid var(--border-color, rgba(0,0,0,0.1));
+}
+
+/* Dark Mode para Note Labels */
+.dark-mode .note-label {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--dark);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Ajuste para garantir que o texto seja legível no dark mode */
+.dark-mode .note-label {
+    background: rgba(255, 255, 255, 0.9);
+    color: #2A2D43; /* Cor escura para contraste com fundo branco */
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Scale Dots */
+.scale-dot {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    margin-left: -11px;
+    margin-top: -11px;
+    border: 3px solid white;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: var(--transition);
+}
+
+.scale-dot:hover {
+    transform: scale(1.2);
+    z-index: 10;
+}
+
+/* Cores dos graus da escala usando suas variáveis */
+.scale-dot.tonic { 
+    background: var(--primary); 
+    animation: pulse 2s infinite;
+}
+.scale-dot.second { 
+    background: var(--secondary); 
+}
+.scale-dot.third { 
+    background: var(--accent); 
+}
+.scale-dot.fourth { 
+    background: var(--success); 
+}
+.scale-dot.fifth { 
+    background: #9C27B0; /* Roxo para variar */
+}
+.scale-dot.sixth { 
+    background: #FF9800; /* Laranja para variar */
+}
+.scale-dot.seventh { 
+    background: #795548; /* Marrom para variar */
+}
+
+/* Fret Markers */
+.fret-marker {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--warning);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: 0 0 8px var(--warning);
+}
+
+.fret-marker.double {
+    width: 6px;
+    height: 6px;
+}
+
+/* Scale Legend */
+.scale-legend {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(108, 99, 255, 0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(108, 99, 255, 0.1);
+}
+
+.legend-items {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.legend-item .scale-dot {
+    position: static;
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+/* Tooltips */
+.scale-dot:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius);
+    font-size: 0.8rem;
+    white-space: pre-line;
+    z-index: 10;
+    min-width: 150px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+/* Dark Mode Support */
+.dark-mode .scale-section {
+    background: #2A2D43;
+}
+
+.dark-mode .scale-controls {
+    background: rgba(108, 99, 255, 0.1);
+    border-color: rgba(108, 99, 255, 0.2);
+}
+
+.dark-mode .control-item select {
+    background: #3A3D53;
+    color: white;
+    border-color: rgba(108, 99, 255, 0.3);
+}
+
+.dark-mode .note-label {
+    background: rgba(255,255,255,0.9);
+    color: var(--dark);
+}
+
+.dark-mode .scale-legend {
+    background: rgba(108, 99, 255, 0.1);
+    border-color: rgba(108, 99, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .control-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .fretboard-container {
+    position: relative;
+    width: 100%;
+    height: 250px; /* (ou o valor que estava antes) */
+    overflow-x: auto;
+    border: 2px solid var(--dark);
+    background: #8B4513;
+    margin: 1.5rem 0;
+    border-radius: var(--border-radius);
+    padding-left: 60px;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+}
+    
+    .legend-items {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .string-label {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+        min-width: 35px;
+    }
+}
+
+/* Animações */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}

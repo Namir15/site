@@ -3,8 +3,15 @@
 // ==========================
 const chords = [
   "C", "D", "E", "F", "G", "A", "B",
-  "Cm", "Dm", "Em", "Fm", "Gm", "Am", "Bm",
-  "C7", "D7", "E7", "F7", "G7", "A7", "B7"
+    "Cm", "Dm", "Em", "Fm", "Gm", "Am", "Bm",
+    "C7", "D7", "E7", "F7", "G7", "A7", "B7",
+    "Cmaj7", "Dmaj7", "Emaj7", "Fmaj7", "Gmaj7", "Amaj7",
+    "Cm7", "Dm7", "Em7", "Fm7", "Gm7", "Am7", "Bm7",
+    "Csus2", "Dsus2", "Esus2", "Gsus2", "Asus2",
+    "Csus4", "Dsus4", "Esus4", "Gsus4", "Asus4",
+    "C5", "D5", "E5", "G5", "A5",
+    "C6", "D6", "E6", "G6", "A6",
+    "C9", "D9", "E9", "G9", "A9"
 ];
 
 // ==========================

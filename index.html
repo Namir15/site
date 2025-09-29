@@ -175,10 +175,8 @@
       <select id="chord-select"></select>
       <div id="chord-visualizer"></div>
     </section>
-                                         
-                    
-                    
-                        
+   
+                   
                 
                 
             </section>
@@ -218,6 +216,78 @@
                     </div>
                 </div>
             </section>
+            <!-- Adicione esta seção após a section de exercícios -->
+                </section>
+            <!-- Adicione esta seção após a section de exercícios -->
+            <section class="scale-section" id="scale-section">
+                <h2 class="section-title">🎸 Explorer de Escalas</h2>
+                
+                <div class="scale-controls">
+                    <label>Escala:</label>
+                    <select id="scale-type">
+                        <option value="major">Maior</option>
+                        <option value="minor">Menor Natural</option>
+                        <option value="pentatonic-major">Pentatônica Maior</option>
+                        <option value="pentatonic-minor">Pentatônica Menor</option>
+                        <option value="blues">Blues</option>
+                        <option value="harmonic-minor">Menor Harmônica</option>
+                    </select>
+                    
+                    <label>Corda Base:</label>
+                    <select id="base-string">
+                        <option value="6">6ª Corda (E)</option>
+                        <option value="5">5ª Corda (A)</option>
+                        <option value="4">4ª Corda (D)</option>
+                    </select>
+                    
+                    <label>Nota Tônica:</label>
+                    <select id="root-note">
+                        <option value="0">C</option>
+                        <option value="1">C#/Db</option>
+                        <option value="2">D</option>
+                        <option value="3">D#/Eb</option>
+                        <option value="4">E</option>
+                        <option value="5">F</option>
+                        <option value="6">F#/Gb</option>
+                        <option value="7">G</option>
+                        <option value="8">G#/Ab</option>
+                        <option value="9">A</option>
+                        <option value="10">A#/Bb</option>
+                        <option value="11">B</option>
+                    </select>
+                    
+                    <button onclick="updateScale()">Atualizar Escala</button>
+                    <button onclick="resetPosition()">Centralizar Braço</button>
+                </div>
+
+                <div class="fretboard-container" id="fretboard-container">
+                    <div class="string-labels">
+                        <div class="string-label">6ª E</div>
+                        <div class="string-label">5ª A</div>
+                        <div class="string-label">4ª D</div>
+                        <div class="string-label">3ª G</div>
+                        <div class="string-label">2ª B</div>
+                        <div class="string-label">1ª E</div>
+                    </div>
+                    <div class="fretboard" id="fretboard"></div>
+                    <div class="scale-overlay" id="scale-overlay"></div>
+                </div>
+
+                <div class="scale-legend">
+                    <h3>Legenda da Escala:</h3>
+                    <div class="legend-items">
+                        <div class="legend-item"><span class="scale-dot tonic" style="display: inline-block;"></span> Tônica</div>
+                        <div class="legend-item"><span class="scale-dot second" style="display: inline-block;"></span> 2ª</div>
+                        <div class="legend-item"><span class="scale-dot third" style="display: inline-block;"></span> 3ª</div>
+                        <div class="legend-item"><span class="scale-dot fourth" style="display: inline-block;"></span> 4ª</div>
+                        <div class="legend-item"><span class="scale-dot fifth" style="display: inline-block;"></span> 5ª</div>
+                        <div class="legend-item"><span class="scale-dot sixth" style="display: inline-block;"></span> 6ª</div>
+                        <div class="legend-item"><span class="scale-dot seventh" style="display: inline-block;"></span> 7ª</div>
+                    </div>
+                </div>
+            </section>
+        
+
         </main>
 
         <footer>
@@ -264,6 +334,8 @@
     </div>
 
     <script src="chord-visualizer.js"></script>
+    <script src="scale-visualizer.js"></script>
     <script src="app.js"></script>
+     
 </body>
 </html>
