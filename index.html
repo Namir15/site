@@ -365,19 +365,13 @@
         <button class="install-btn" id="installAppButton">Instalar</button>
     </div>
 
-<!-- NO FINAL DO BODY -->
-<!-- TENTE ESTA CDN PRINCIPAL -->
-<script src="https://cdn.jsdelivr.net/npm/midijs@0.3.0/lib/MIDI.min.js"></script>
-
-<!-- FALLBACK 1 -->
-<script>window.MIDI || document.write('<script src="https://cdn.rawgit.com/mudcube/MIDI.js/edfa90f2/build/MIDI.min.js"><\/script>')</script>
-
-<!-- FALLBACK 2 -->
-<script>window.MIDI || document.write('<script src="https://unpkg.com/midijs@0.3.0/lib/MIDI.min.js"><\/script>')</script>
-
+<!-- NO FINAL DO BODY - REMOVA MIDI.js E USE TONE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 <script src="js/midi-player.js"></script>
 <script src="chord-visualizer.js"></script>
 <script src="scale-visualizer.js"></script>
 <script src="app.js"></script>
+
+
 </body>
 </html>

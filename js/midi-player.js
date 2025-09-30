@@ -1,4 +1,4 @@
-// js/midi-player.js - VERSÃO ULTRA-ROBUSTA
+// js/midi-player.js - VERSÃO TONE.JS
 class MIDIPlayer {
     constructor() {
         this.isInitialized = false;
@@ -6,211 +6,130 @@ class MIDIPlayer {
         this.isPlaying = false;
         this.midiFiles = [];
         this.volume = 0.8;
+        this.synth = null;
+        this.currentSequence = null;
         
-        console.log('🎵 MIDI Player instanciado');
+        console.log('🎵 MIDI Player com Tone.js');
         this.init();
     }
 
     async init() {
         try {
-            console.log('🚀 Iniciando MIDI Player...');
+            // 1. Carrega lista de músicas
+            await this.loadMidiList();
             
-            // Carrega a lista de músicas primeiro
-            await this.loadMidiListFromJSON();
+            // 2. Configura controles
             this.setupEventListeners();
-            
-            // Tenta inicializar MIDI
-            await this.initializeMIDI();
-            
+
+            // 3. Prepara desbloqueio de áudio
+            this.prepareAudioUnlock();
+
         } catch (error) {
             console.warn('Aviso na inicialização:', error.message);
-            this.updateStatus('Player carregado em modo limitado', 'warning');
+            this.updateStatus('Player carregado em modo de lista', 'info');
         }
     }
 
-    async initializeMIDI() {
-        console.log('🔄 Inicializando sistema de áudio...');
+    prepareAudioUnlock() {
+        // Só inicializa Tone.js depois do primeiro clique do usuário
+        const unlock = async () => {
+            if (!this.isInitialized) {
+                console.log('🔓 Primeiro clique detectado, desbloqueando áudio...');
+                await this.initializeTone();
+            }
+            document.removeEventListener('click', unlock);
+        };
+        document.addEventListener('click', unlock);
+    }
+
+    async initializeTone() {
+        console.log('🔧 Inicializando Tone.js...');
         
-        // Método 1: Verifica se MIDI.js já carregou
-        if (await this.checkMIDIReady()) {
-            console.log('✅ MIDI.js detectado automaticamente');
-            this.setupMIDIPlugin();
-            return;
-        }
-        
-        // Método 2: Tenta carregar manualmente
-        console.log('📥 MIDI.js não encontrado, carregando manualmente...');
-        await this.loadMIDIManually();
-    }
-
-    checkMIDIReady() {
-        return new Promise((resolve) => {
-            let attempts = 0;
-            const maxAttempts = 30; // 3 segundos
-            
-            const check = () => {
-                attempts++;
-                
-                if (typeof MIDI !== 'undefined' && MIDI.loadPlugin) {
-                    console.log(`✅ MIDI.js pronto após ${attempts} tentativas`);
-                    resolve(true);
-                    return;
-                }
-                
-                if (attempts >= maxAttempts) {
-                    console.warn(`❌ MIDI.js não carregou após ${maxAttempts} tentativas`);
-                    resolve(false);
-                    return;
-                }
-                
-                setTimeout(check, 100);
-            };
-            
-            check();
-        });
-    }
-
-    loadMIDIManually() {
-        return new Promise((resolve) => {
-            console.log('🔧 Tentando carregar MIDI.js manualmente...');
-            
-            // Tenta várias CDNs
-            const cdns = [
-                'https://cdn.jsdelivr.net/npm/midijs@0.3.0/lib/MIDI.min.js',
-                'https://unpkg.com/midijs@0.3.0/lib/MIDI.min.js',
-                'https://cdn.rawgit.com/mudcube/MIDI.js/edfa90f2/build/MIDI.min.js'
-            ];
-            
-            this.tryCDNs(cdns, 0, resolve);
-        });
-    }
-
-    tryCDNs(cdns, index, resolve) {
-        if (index >= cdns.length) {
-            console.error('❌ Todas as CDNs falharam');
+        if (typeof Tone === 'undefined') {
+            console.error('❌ Tone.js não carregada');
+            this.updateStatus('❌ Biblioteca de áudio não carregada', 'error');
             this.setupFallbackMode();
-            resolve();
             return;
         }
-        
-        const cdn = cdns[index];
-        console.log(`🌐 Tentando CDN ${index + 1}/${cdns.length}: ${cdn}`);
-        
-        const script = document.createElement('script');
-        script.src = cdn;
-        
-        script.onload = () => {
-            console.log(`✅ CDN ${index + 1} carregou com sucesso`);
-            setTimeout(() => {
-                this.setupMIDIPlugin();
-                resolve();
-            }, 500);
-        };
-        
-        script.onerror = () => {
-            console.warn(`❌ CDN ${index + 1} falhou`);
-            this.tryCDNs(cdns, index + 1, resolve);
-        };
-        
-        document.head.appendChild(script);
+
+        try {
+            this.synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: "sine" },
+                envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 1 }
+            }).toDestination();
+
+            const reverb = new Tone.Reverb({ decay: 2, wet: 0.1 }).toDestination();
+            const filter = new Tone.Filter({ frequency: 1200, type: "lowpass" }).toDestination();
+
+            this.synth.connect(reverb);
+            this.synth.connect(filter);
+
+            // 🔑 Agora sim inicializa o contexto
+            await Tone.start();
+            console.log('✅ Tone.js inicializada com sucesso!');
+            console.log('🔊 Contexto de áudio:', Tone.context.state);
+            
+            this.isInitialized = true;
+            this.setVolume(this.volume);
+            this.updateStatus('✅ Player de áudio pronto!', 'success');
+            this.enableControls();
+
+        } catch (error) {
+            console.error('❌ Erro ao inicializar Tone.js:', error);
+            this.updateStatus('❌ Erro no sistema de áudio', 'error');
+            this.setupFallbackMode();
+        }
     }
 
     setupFallbackMode() {
-        console.log('🔄 Ativando modo fallback (sem áudio)');
-        this.updateStatus('🔇 Modo sem áudio - Lista disponível', 'warning');
-        
-        // Ainda permite interação, mas sem som
-        this.setupBasicControls();
+        console.log('🔄 Modo fallback ativado');
+        this.updateStatus('📋 Lista de músicas disponível', 'info');
     }
 
-    setupBasicControls() {
+    enableControls() {
         const playBtn = document.getElementById('play-midi');
         if (playBtn) {
-            playBtn.innerHTML = '<i class="fas fa-play"></i> Sem Áudio';
-            playBtn.disabled = true;
-            playBtn.title = 'Sistema de áudio não disponível';
-        }
-    }
-
-    setupMIDIPlugin() {
-        if (typeof MIDI === 'undefined') {
-            console.error('❌ MIDI ainda não disponível após carregamento');
-            this.setupFallbackMode();
-            return;
-        }
-
-        console.log('🎛️ Configurando plugin MIDI...');
-        
-        try {
-            MIDI.loadPlugin({
-                soundfontUrl: "https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/",
-                instrument: "acoustic_guitar_nylon",
-                onprogress: (state, progress) => {
-                    console.log(`📦 Progresso MIDI: ${state} ${progress}%`);
-                    if (progress < 100) {
-                        this.updateStatus(`Carregando instrumentos: ${progress}%`, 'loading');
-                    }
-                },
-                onsuccess: () => {
-                    console.log('🎉 Plugin MIDI carregado com sucesso!');
-                    this.isInitialized = true;
-                    this.setVolume(this.volume);
-                    this.updateStatus('✅ Player MIDI totalmente funcional!', 'success');
-                    this.enableFullControls();
-                },
-                onerror: (err) => {
-                    console.error('❌ Erro no plugin MIDI:', err);
-                    this.updateStatus('❌ Sintetizador não disponível', 'error');
-                    this.setupFallbackMode();
-                }
-            });
-        } catch (error) {
-            console.error('❌ Erro crítico no setup MIDI:', error);
-            this.setupFallbackMode();
-        }
-    }
-
-    enableFullControls() {
-        const playBtn = document.getElementById('play-midi');
-        if (playBtn) {
-            playBtn.innerHTML = '<i class="fas fa-play"></i> Tocar';
             playBtn.disabled = false;
-            playBtn.style.background = 'var(--success)';
+            playBtn.innerHTML = '<i class="fas fa-play"></i> Tocar';
+            playBtn.title = 'Clique para tocar a música selecionada';
         }
         
-        // Atualiza todos os botões de play da lista
         document.querySelectorAll('.play-btn').forEach(btn => {
             btn.disabled = false;
-            btn.title = 'Clique para tocar';
         });
+        
+        console.log('🎛️ Controles de áudio ativados');
     }
 
-    async loadMidiListFromJSON() {
+    async loadMidiList() {
         try {
-            const response = await fetch('midis.json');
-            if (!response.ok) throw new Error('Arquivo não encontrado');
+            console.log('📁 Carregando lista de músicas...');
+            
+            const response = await fetch('./midis.json');
+            if (!response.ok) throw new Error('midis.json não encontrado');
             
             this.midiFiles = await response.json();
-            console.log(`✅ ${this.midiFiles.length} músicas carregadas`);
-            this.renderMidiList();
+            console.log(`✅ ${this.midiFiles.length} músicas carregadas do JSON`);
             
         } catch (error) {
-            console.error('Erro ao carregar lista:', error);
-            this.useFallbackMidiList();
+            console.log('🔄 Usando lista embutida...');
+            this.midiFiles = [
+                { name: "Hino Nacional Brasileiro", file: "./midis/Hino_Nacional_Brasileiro.mid" },
+                { name: "Granados Bocetos No1", file: "./midis/Granados_Bocetos_No1.mid" }
+            ];
         }
-    }
-
-    useFallbackMidiList() {
-        this.midiFiles = [
-            { "name": "Hino Nacional Brasileiro", "file": "./midis/Hino_Nacional_Brasileiro.mid" },
-            { "name": "Granados Bocetos No1", "file": "./midis/Granados_Bocetos_No1.mid" }
-        ];
+        
         this.renderMidiList();
     }
 
     renderMidiList() {
         const midiList = document.getElementById('midi-list');
         if (!midiList) return;
+
+        if (this.midiFiles.length === 0) {
+            midiList.innerHTML = '<li class="loading-item">Nenhuma música encontrada</li>';
+            return;
+        }
 
         midiList.innerHTML = this.midiFiles.map((file, index) => `
             <li class="midi-item" data-index="${index}">
@@ -234,26 +153,30 @@ class MIDIPlayer {
     }
 
     setupMidiListEvents() {
-        document.querySelectorAll('.midi-item').forEach(item => {
+        const midiList = document.getElementById('midi-list');
+        if (!midiList) return;
+
+        midiList.querySelectorAll('.midi-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 if (!e.target.closest('.play-btn')) {
-                    this.selectTrack(parseInt(item.dataset.index));
+                    const index = parseInt(item.getAttribute('data-index'));
+                    this.selectTrack(index);
                 }
             });
         });
 
-        document.querySelectorAll('.play-btn').forEach(btn => {
+        midiList.querySelectorAll('.play-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const index = parseInt(e.currentTarget.dataset.index);
+                const index = parseInt(e.currentTarget.getAttribute('data-index'));
                 this.selectTrack(index);
-                this.playCurrentTrack();
+                this.playDemoMusic(); // Toca uma demo em vez do MIDI
             });
         });
     }
 
     setupEventListeners() {
-        // Busca
+        // Sistema de busca
         const searchInput = document.getElementById('midi-search');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
@@ -261,50 +184,37 @@ class MIDIPlayer {
             });
         }
 
-        // Controles
+        // Controles principais
         const playBtn = document.getElementById('play-midi');
         const pauseBtn = document.getElementById('pause-midi');
         const stopBtn = document.getElementById('stop-midi');
         const volumeControl = document.getElementById('midi-volume');
 
-        if (playBtn) playBtn.addEventListener('click', () => this.playCurrentTrack());
-        if (pauseBtn) pauseBtn.addEventListener('click', () => this.pauseMIDI());
-        if (stopBtn) stopBtn.addEventListener('click', () => this.stopMIDI());
+        if (playBtn) {
+            playBtn.addEventListener('click', () => this.playDemoMusic());
+        }
+
+        if (pauseBtn) {
+            pauseBtn.addEventListener('click', () => this.pauseMusic());
+        }
+
+        if (stopBtn) {
+            stopBtn.addEventListener('click', () => this.stopMusic());
+        }
+
         if (volumeControl) {
             volumeControl.addEventListener('input', (e) => {
                 this.setVolume(e.target.value / 100);
             });
         }
+
+        console.log('🎛️ Todos os controles configurados');
     }
 
-    filterMidiList(searchTerm) {
-        document.querySelectorAll('.midi-item').forEach(item => {
-            const name = item.querySelector('.midi-name').textContent.toLowerCase();
-            item.style.display = name.includes(searchTerm.toLowerCase()) ? 'flex' : 'none';
-        });
-    }
-
-    selectTrack(index) {
-        document.querySelectorAll('.midi-item').forEach(item => item.classList.remove('active'));
-        
-        const selectedItem = document.querySelector(`.midi-item[data-index="${index}"]`);
-        if (selectedItem) {
-            selectedItem.classList.add('active');
-            this.currentTrack = this.midiFiles[index];
-            this.updateCurrentTrackDisplay();
-        }
-    }
-
-    updateCurrentTrackDisplay() {
-        const element = document.getElementById('current-track');
-        if (element && this.currentTrack) {
-            element.textContent = `Selecionada: ${this.currentTrack.name}`;
-        }
-    }
-
-    async playCurrentTrack() {
+    // DEMO: Toca uma música de exemplo usando Tone.js
+    playDemoMusic() {
         if (!this.currentTrack) {
-            this.updateStatus('⚠️ Selecione uma música', 'error');
+            this.updateStatus('⚠️ Selecione uma música primeiro', 'warning');
             return;
         }
 
@@ -315,47 +225,129 @@ class MIDIPlayer {
 
         try {
             this.updateStatus(`🎵 Tocando: ${this.currentTrack.name}`, 'playing');
-            this.stopMIDI();
+            this.stopMusic();
+
+            // Demo: Toca uma sequência musical simples
+            const now = Tone.now();
+            const melody = ["C4", "E4", "G4", "C5", "G4", "E4", "C4"];
             
-            MIDI.Player.loadFile(this.currentTrack.file, () => {
-                MIDI.Player.start();
-                this.isPlaying = true;
-                this.updatePlaybackState();
-            });
+            // Para qualquer sequência anterior
+            if (this.currentSequence) {
+                this.currentSequence.stop();
+            }
+
+            // Cria nova sequência
+            this.currentSequence = new Tone.Sequence((time, note) => {
+                this.synth.triggerAttackRelease(note, "8n", time);
+            }, melody, "4n");
+
+            this.currentSequence.start(0);
+            this.currentSequence.loop = true;
+            this.currentSequence.loopEnd = "2m";
+            
+            // Inicia o transport do Tone.js
+            Tone.Transport.start();
+            this.isPlaying = true;
+            this.updatePlaybackState();
+
+            console.log(`▶️ Reproduzindo demo: ${this.currentTrack.name}`);
 
         } catch (error) {
-            console.error('Erro na reprodução:', error);
-            this.updateStatus('❌ Erro ao reproduzir', 'error');
+            console.error('Erro ao reproduzir:', error);
+            this.updateStatus('❌ Erro na reprodução', 'error');
         }
     }
 
-    pauseMIDI() {
-        if (this.isPlaying && MIDI.Player) {
-            MIDI.Player.pause();
+    pauseMusic() {
+        if (this.isPlaying) {
+            Tone.Transport.pause();
             this.isPlaying = false;
             this.updatePlaybackState();
-            this.updateStatus('⏸️ Pausado', 'info');
+            this.updateStatus('⏸️ Música pausada', 'info');
         }
     }
 
-    stopMIDI() {
-        if (MIDI.Player) MIDI.Player.stop();
+    stopMusic() {
+        if (this.currentSequence) {
+            this.currentSequence.stop();
+        }
+        Tone.Transport.stop();
+        Tone.Transport.cancel();
         this.isPlaying = false;
         this.updatePlaybackState();
+        this.updateStatus('⏹️ Reprodução parada', 'info');
+    }
+
+    filterMidiList(searchTerm) {
+        const items = document.querySelectorAll('.midi-item');
+        items.forEach(item => {
+            const name = item.querySelector('.midi-name').textContent.toLowerCase();
+            item.style.display = name.includes(searchTerm.toLowerCase()) ? 'flex' : 'none';
+        });
+    }
+
+    selectTrack(index) {
+        document.querySelectorAll('.midi-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        const selectedItem = document.querySelector(`.midi-item[data-index="${index}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('active');
+            this.currentTrack = this.midiFiles[index];
+            this.updateCurrentTrackDisplay();
+            
+            console.log(`🎵 Selecionada: ${this.currentTrack.name}`);
+        }
+    }
+
+    updateCurrentTrackDisplay() {
+        const element = document.getElementById('current-track');
+        if (element && this.currentTrack) {
+            element.textContent = `Selecionada: ${this.currentTrack.name}`;
+            element.style.fontWeight = 'bold';
+            element.style.color = 'var(--primary)';
+        }
     }
 
     updatePlaybackState() {
         const playBtn = document.getElementById('play-midi');
-        if (playBtn) {
-            playBtn.innerHTML = this.isPlaying ? 
-                '<i class="fas fa-pause"></i> Pausar' : 
-                '<i class="fas fa-play"></i> Tocar';
+        const currentItem = document.querySelector('.midi-item.active');
+        const playIcon = currentItem ? currentItem.querySelector('.play-btn i') : null;
+
+        if (this.isPlaying) {
+            if (playBtn) {
+                playBtn.innerHTML = '<i class="fas fa-pause"></i> Pausar';
+                playBtn.style.background = 'var(--secondary)';
+            }
+            if (playIcon) {
+                playIcon.className = 'fas fa-pause';
+                currentItem.querySelector('.play-btn').classList.add('playing');
+            }
+        } else {
+            if (playBtn) {
+                playBtn.innerHTML = '<i class="fas fa-play"></i> Tocar';
+                playBtn.style.background = '';
+            }
+            if (playIcon) {
+                playIcon.className = 'fas fa-play';
+                if (currentItem) {
+                    currentItem.querySelector('.play-btn').classList.remove('playing');
+                }
+            }
         }
     }
 
     setVolume(volume) {
         this.volume = volume;
-        if (MIDI && MIDI.setVolume) MIDI.setVolume(0, volume);
+        if (this.synth) {
+            this.synth.volume.value = Tone.gainToDb(volume);
+        }
+        
+        const volumeControl = document.getElementById('midi-volume');
+        if (volumeControl) {
+            volumeControl.value = volume * 100;
+        }
     }
 
     updateStatus(message, type = 'info') {
@@ -363,13 +355,55 @@ class MIDIPlayer {
         if (element) {
             element.textContent = message;
             element.className = `status-message ${type}`;
-            console.log(`📢 ${message}`);
+        }
+    }
+
+    // Método para tocar acordes específicos (útil para o visualizador)
+    playChord(notes, duration = "4n") {
+        if (!this.isInitialized || !this.synth) {
+            console.warn('Sintetizador não disponível');
+            return;
+        }
+
+        try {
+            const now = Tone.now();
+            this.synth.triggerAttackRelease(notes, duration, now);
+        } catch (error) {
+            console.error('Erro ao tocar acorde:', error);
+        }
+    }
+
+    // Método para tocar uma nota individual
+    playNote(note, duration = "4n") {
+        if (!this.isInitialized || !this.synth) {
+            console.warn('Sintetizador não disponível');
+            return;
+        }
+
+        try {
+            const now = Tone.now();
+            this.synth.triggerAttackRelease(note, duration, now);
+        } catch (error) {
+            console.error('Erro ao tocar nota:', error);
         }
     }
 }
 
 // Inicialização segura
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎸 Inicializando Violão Pro...');
-    window.midiPlayer = new MIDIPlayer();
+    console.log('🎸 Violão Pro com Tone.js - Inicializando...');
+    try {
+        window.midiPlayer = new MIDIPlayer();
+        
+        window.playChord = (notes) => window.midiPlayer?.playChord(notes);
+        window.playNote = (note) => window.midiPlayer?.playNote(note);
+        
+    } catch (error) {
+        console.error('❌ Erro crítico:', error);
+        const statusElement = document.getElementById('player-status');
+        if (statusElement) {
+            statusElement.textContent = '❌ Erro no player';
+            statusElement.className = 'status-message error';
+        }
+    }
 });

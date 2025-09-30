@@ -1,44 +1,9 @@
-// ==========================
-// Renderizador de acordes COMPLETO
-// ==========================
-function renderChord(containerId, chordName) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const svgNS = "http://www.w3.org/2000/svg";
-  const width = 220;
-  const height = 300;
-  const numFrets = 5;
-  const numStrings = 6;
-
-  const svg = document.createElementNS(svgNS, "svg");
-  svg.setAttribute("width", width);
-  svg.setAttribute("height", height);
-  svg.style.border = "1px solid #ccc";
-  svg.style.background = "#fafafa";
-
-  // Margens
-  const marginLeft = 30;
-  const marginRight = 30;
-  const marginTop = 40;
-  const marginBottom = 80;
-
-  // Área útil
-  const usableWidth = width - marginLeft - marginRight;
-  const usableHeight = height - marginTop - marginBottom;
-
-  // Espaçamentos
-  const stringSpacing = usableWidth / (numStrings - 1);
-  const fretSpacing = usableHeight / numFrets;
-
-  // ==========================
-  // DEFINIÇÕES DE TODOS OS ACORDES
-  // ==========================
-  const chordShapes = {
-    // Acordes maiores
-    "C":  [[], [3,3,"T"], [2,2], [], [1,1], []],
+// chord-visualizer.js - VERSÃO COMPLETA E CORRIGIDA
+class ChordVisualizer {
+    constructor() {
+        this.chordShapes = {
+            // Acordes maiores
+            "C":  [[], [2,3,"T"], [2,2], [], [1,1], []],
     "D":  [[], [], [0,0,"T"], [2,1], [3,3], [2,2]],
     "E":  [[,,"T"], [2,2], [2,3], [1,1], [], []],
     "F":  [[1,"B","T"], [3,4], [3,3], [2,2], [1,"B"], [1,"B",]],
@@ -114,215 +79,524 @@ function renderChord(containerId, chordName) {
     "E9":  [[0,0,"T"], [2,2], [0,0], [1,1], [2,4], [0,0]],
     "G9":  [[3,2,"T"], [2,1], [0,0], [0,0], [0,0], [1,3]],
     "A9":  [[], [0,0,"T"], [2,1], [1,1], [2,3], [0,0]]
-  };
+        };
+        
+         
 
-  const shape = chordShapes[chordName] || [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+        this.init();
+    }
 
-  // ==========================
-  // Cordas (linhas verticais)
-  // ==========================
-  const stringNames = ["E", "A", "D", "G", "B", "E"];
-  for (let i = 0; i < numStrings; i++) {
-    const x = marginLeft + i * stringSpacing;
+    init() {
+        console.log('ChordVisualizer inicializado');
+        this.setupChordSelector();
+        this.setupQuiz();
+        this.setupEventListeners();
+    }
+
+    setupChordSelector() {
+        const chordSelect = document.getElementById('chord-select');
+        if (!chordSelect) {
+            console.warn('Elemento chord-select não encontrado');
+            return;
+        }
+
+        chordSelect.innerHTML = '<option value="">Selecione um acorde</option>';
+        
+        Object.keys(this.chordShapes).forEach(chordName => {
+            const option = document.createElement('option');
+            option.value = chordName;
+            option.textContent = chordName;
+            chordSelect.appendChild(option);
+        });
+
+        chordSelect.addEventListener('change', (e) => {
+            this.displayChord(e.target.value);
+        });
+
+        // Inicializa com o primeiro acorde
+        setTimeout(() => {
+            if (Object.keys(this.chordShapes).length > 0) {
+                chordSelect.value = Object.keys(this.chordShapes)[0];
+                this.displayChord(Object.keys(this.chordShapes)[0]);
+            }
+        }, 100);
+    }
+
+    setupQuiz() {
+        const newQuizBtn = document.getElementById('new-quiz-btn');
+        if (newQuizBtn) {
+            newQuizBtn.addEventListener('click', () => {
+                this.generateQuiz();
+            });
+            
+            // Inicia o quiz automaticamente
+            setTimeout(() => {
+                newQuizBtn.click();
+            }, 1500);
+        }
+    }
+
+    setupEventListeners() {
+        // Event listeners adicionais podem ser adicionados aqui
+    }
+
+    displayChord(chordName) {
+        const visualizer = document.getElementById('chord-visualizer');
+        if (!visualizer) {
+            console.warn('Elemento chord-visualizer não encontrado');
+            return;
+        }
+
+        if (!chordName || !this.chordShapes[chordName]) {
+            visualizer.innerHTML = this.createPlaceholder('Selecione um acorde para visualizar');
+            return;
+        }
+
+        const chord = this.chordShapes[chordName];
+        visualizer.innerHTML = this.createChordDiagram(chordName, chord);
+    }
+
+    createPlaceholder(message) {
+        return `
+            <div style="text-align: center; padding: 40px; color: #666;">
+                <i class="fas fa-guitar" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+
+    createChordDiagram(chordName, chord) {
+        const width = 220;
+        const height = 300;
+        const numFrets = 5;
+        const numStrings = 6;
+
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("width", width);
+        svg.setAttribute("height", height);
+        svg.style.border = "1px solid #ccc";
+        svg.style.background = "#fafafa";
+        svg.style.borderRadius = "8px";
+
+        // Margens
+        const marginLeft = 30;
+        const marginRight = 30;
+        const marginTop = 40;
+        const marginBottom = 60;
+
+        // Área útil
+        const usableWidth = width - marginLeft - marginRight;
+        const usableHeight = height - marginTop - marginBottom;
+
+        // Espaçamentos
+        const stringSpacing = usableWidth / (numStrings - 1);
+        const fretSpacing = usableHeight / numFrets;
+
+        // Cordas (linhas verticais)
+        const stringNames = ["E", "A", "D", "G", "B", "E"];
+        for (let i = 0; i < numStrings; i++) {
+            const x = marginLeft + i * stringSpacing;
+            
+            const line = document.createElementNS(svgNS, "line");
+            line.setAttribute("x1", x);
+            line.setAttribute("y1", marginTop);
+            line.setAttribute("x2", x);
+            line.setAttribute("y2", marginTop + usableHeight);
+            line.setAttribute("stroke", "black");
+            line.setAttribute("stroke-width", i === 0 || i === numStrings - 1 ? "2" : "1");
+            svg.appendChild(line);
+
+            // Nome da corda
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", x);
+            text.setAttribute("y", marginTop - 10);
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("font-size", "12");
+            text.setAttribute("font-weight", "bold");
+            text.textContent = stringNames[i];
+            svg.appendChild(text);
+        }
+
+        // Trastes (linhas horizontais)
+        for (let i = 0; i <= numFrets; i++) {
+            const y = marginTop + i * fretSpacing;
+            
+            const line = document.createElementNS(svgNS, "line");
+            line.setAttribute("x1", marginLeft);
+            line.setAttribute("y1", y);
+            line.setAttribute("x2", marginLeft + usableWidth);
+            line.setAttribute("y2", y);
+            line.setAttribute("stroke", "black");
+            line.setAttribute("stroke-width", i === 0 ? "3" : "1");
+            svg.appendChild(line);
+
+            // Número do traste
+            if (i > 0) {
+                const text = document.createElementNS(svgNS, "text");
+                text.setAttribute("x", marginLeft - 10);
+                text.setAttribute("y", y - (fretSpacing / 2) + 4);
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("font-size", "10");
+                text.textContent = i;
+                svg.appendChild(text);
+            }
+        }
+
+        // Pestana (barre)
+        if (chord.some(pos => pos[1] === "B")) {
+            const fret = chord.find(pos => pos[1] === "B")[0];
+            const y = marginTop + (fret - 0.5) * fretSpacing;
+            
+            const rect = document.createElementNS(svgNS, "rect");
+            rect.setAttribute("x", marginLeft);
+            rect.setAttribute("y", y - 8);
+            rect.setAttribute("width", usableWidth);
+            rect.setAttribute("height", 16);
+            rect.setAttribute("rx", 8);
+            rect.setAttribute("fill", "#444");
+            rect.setAttribute("opacity", "0.6");
+            svg.appendChild(rect);
+        }
+
+        // Marcações das notas
+        for (let i = 0; i < numStrings; i++) {
+            const pos = chord[i];
+            if (!pos || pos.length === 0) continue;
+
+            const [fret, finger, tonicFlag] = pos;
+            const x = marginLeft + i * stringSpacing;
+
+            // Notas pressionadas (casa > 0)
+            if (fret > 0 && finger !== "B") {
+                const y = marginTop + (fret - 0.5) * fretSpacing;
+
+                const circle = document.createElementNS(svgNS, "circle");
+                circle.setAttribute("cx", x);
+                circle.setAttribute("cy", y);
+                circle.setAttribute("r", 8);
+                circle.setAttribute("fill", tonicFlag === "T" ? "#6C63FF" : "white");
+                circle.setAttribute("stroke", "#333");
+                circle.setAttribute("stroke-width", "2");
+                svg.appendChild(circle);
+
+                const text = document.createElementNS(svgNS, "text");
+                text.setAttribute("x", x);
+                text.setAttribute("y", y + 4);
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("font-size", "10");
+                text.setAttribute("font-weight", "bold");
+                text.setAttribute("fill", tonicFlag === "T" ? "white" : "black");
+                text.textContent = finger;
+                svg.appendChild(text);
+            }
+
+            // Cordas soltas (casa 0)
+            if (fret === 0) {
+                const y = marginTop - 20;
+
+                const text = document.createElementNS(svgNS, "text");
+                text.setAttribute("x", x);
+                text.setAttribute("y", y);
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("font-size", "14");
+                text.setAttribute("font-weight", "bold");
+                text.setAttribute("fill", "green");
+                text.textContent = "○";
+                svg.appendChild(text);
+            }
+
+            // "X" para cordas não tocadas
+            if (pos.length === 0) {
+                const y = marginTop - 20;
+                
+                const text = document.createElementNS(svgNS, "text");
+                text.setAttribute("x", x);
+                text.setAttribute("y", y);
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("font-size", "14");
+                text.setAttribute("font-weight", "bold");
+                text.setAttribute("fill", "red");
+                text.textContent = "X";
+                svg.appendChild(text);
+            }
+        }
+              
+              
+        // Nome do acorde
+        const chordText = document.createElementNS(svgNS, "text");
+        chordText.setAttribute("x", width / 2);
+        chordText.setAttribute("y", height - 15);
+        chordText.setAttribute("text-anchor", "middle");
+        chordText.setAttribute("font-size", "16");
+        chordText.setAttribute("font-weight", "bold");
+        chordText.setAttribute("fill", "#6C63FF");
+        chordText.textContent = chordName;
+        svg.appendChild(chordText);
+
+        return svg.outerHTML;
+    }
+
+    generateQuiz() {
+        const quizVisualizer = document.getElementById('quiz-chord-visualizer');
+        const quizOptions = document.getElementById('quiz-options');
+        const quizFeedback = document.getElementById('quiz-feedback');
+
+        if (!quizVisualizer || !quizOptions) {
+            console.warn('Elementos do quiz não encontrados');
+            return;
+        }
+
+        // Seleciona acordes básicos para o quiz
+        const quizChords = ["C", "G", "D", "Am", "Em", "F"];
+        const correctChord = quizChords[Math.floor(Math.random() * quizChords.length)];
+        const chord = this.chordShapes[correctChord];
+
+        // Mostra o diagrama do acorde (sem o nome)
+        quizVisualizer.innerHTML = this.createChordDiagram("?", chord);
+
+        // Remove o nome do acorde do visualizador do quiz
+        setTimeout(() => {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = quizVisualizer.innerHTML;
+            const textElements = tempDiv.querySelectorAll('text');
+            textElements.forEach(text => {
+                if (text.textContent === "?") {
+                    text.textContent = "?";
+                }
+            });
+            quizVisualizer.innerHTML = tempDiv.innerHTML;
+        }, 100);
+
+        // Gera opções (incluindo a correta)
+        quizOptions.innerHTML = '';
+        const options = this.shuffleArray([...quizChords.filter(name => name !== correctChord).slice(0, 3), correctChord]);
+        
+        options.forEach(option => {
+            const button = document.createElement('button');
+            button.className = 'quiz-option';
+            button.textContent = option;
+            button.addEventListener('click', () => {
+                this.checkQuizAnswer(option, correctChord, quizFeedback, button);
+            });
+            quizOptions.appendChild(button);
+        });
+
+        if (quizFeedback) {
+            quizFeedback.textContent = 'Qual é este acorde?';
+            quizFeedback.className = '';
+            quizFeedback.style.color = '#333';
+        }
+    }
+
+    checkQuizAnswer(selected, correct, feedbackElement, button) {
+        const allButtons = document.querySelectorAll('#quiz-options .quiz-option');
+        
+        // Desabilita todos os botões
+        allButtons.forEach(btn => {
+            btn.disabled = true;
+        });
+
+        // Remove classes anteriores
+        allButtons.forEach(btn => {
+            btn.classList.remove('correct', 'incorrect');
+        });
+
+        if (selected === correct) {
+            button.classList.add('correct');
+            if (feedbackElement) {
+                feedbackElement.textContent = '🎉 Correto! Parabéns!';
+                feedbackElement.style.color = '#4CAF50';
+                feedbackElement.className = 'correct-feedback';
+            }
+        } else {
+            button.classList.add('incorrect');
+            // Mostra qual era a resposta correta
+            allButtons.forEach(btn => {
+                if (btn.textContent === correct) {
+                    btn.classList.add('correct');
+                }
+            });
+            if (feedbackElement) {
+                feedbackElement.textContent = `❌ Resposta correta: ${correct}`;
+                feedbackElement.style.color = '#F44336';
+                feedbackElement.className = 'incorrect-feedback';
+            }
+        }
+    } 
+
     
-    const line = document.createElementNS(svgNS, "line");
-    line.setAttribute("x1", x);
-    line.setAttribute("y1", marginTop);
-    line.setAttribute("x2", x);
-    line.setAttribute("y2", marginTop + usableHeight);
-    line.setAttribute("stroke", "black");
-    line.setAttribute("stroke-width", i === 0 || i === numStrings - 1 ? "2" : "1");
-    svg.appendChild(line);
 
-    const text = document.createElementNS(svgNS, "text");
-    text.setAttribute("x", x);
-    text.setAttribute("y", marginTop - 10);
-    text.setAttribute("text-anchor", "middle");
-    text.setAttribute("font-size", "12");
-    text.setAttribute("font-weight", "bold");
-    text.textContent = stringNames[i];
-    svg.appendChild(text);
-  }
-
-  // ==========================
-  // Trastes (linhas horizontais)
-  // ==========================
-  for (let i = 0; i <= numFrets; i++) {
-    const y = marginTop + i * fretSpacing;
-    
-    const line = document.createElementNS(svgNS, "line");
-    line.setAttribute("x1", marginLeft);
-    line.setAttribute("y1", y);
-    line.setAttribute("x2", marginLeft + usableWidth);
-    line.setAttribute("y2", y);
-    line.setAttribute("stroke", "black");
-    line.setAttribute("stroke-width", i === 0 ? "3" : "1");
-    svg.appendChild(line);
-
-    if (i > 0) {
-      const text = document.createElementNS(svgNS, "text");
-      text.setAttribute("x", marginLeft - 10);
-      text.setAttribute("y", y - (fretSpacing / 2) + 4);
-      text.setAttribute("text-anchor", "middle");
-      text.setAttribute("font-size", "10");
-      text.textContent = i;
-      svg.appendChild(text);
-    }
-  }
-
-  // ==========================
-  // Pestana (barre)
-  // ==========================
-  if (shape.some(pos => pos[1] === "B")) {
-    const fret = shape.find(pos => pos[1] === "B")[0];
-    const y = marginTop + (fret - 0.5) * fretSpacing;
-    
-    const rect = document.createElementNS(svgNS, "rect");
-    rect.setAttribute("x", marginLeft);
-    rect.setAttribute("y", y - 8);
-    rect.setAttribute("width", usableWidth);
-    rect.setAttribute("height", 16);
-    rect.setAttribute("rx", 8);
-    rect.setAttribute("fill", "#444");
-    rect.setAttribute("opacity", "0.6");
-    svg.appendChild(rect);
-  }
-
-  // ==========================
-  // MARCAÇÕES NO BRAÇO
-  // ==========================
-  for (let i = 0; i < numStrings; i++) {
-    const pos = shape[i];
-    if (!pos || pos.length === 0) continue;
-
-    const [fret, finger, tonicFlag] = pos;
-    const x = marginLeft + i * stringSpacing;
-
-    // Notas pressionadas (casa > 0)
-    if (fret > 0 && finger !== "B") {
-      const y = marginTop + (fret - 0.5) * fretSpacing;
-
-      const text = document.createElementNS(svgNS, "text");
-      text.setAttribute("x", x);
-      text.setAttribute("y", y + 5);
-      text.setAttribute("text-anchor", "middle");
-      text.setAttribute("font-size", "16");
-      text.setAttribute("font-weight", "bold");
-      text.setAttribute("fill", "black");
-      text.textContent = finger;
-      svg.appendChild(text);
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     }
 
-    // Cordas soltas (casa 0)
-    if (fret === 0) {
-      const y = marginTop - 15;
+    // Método para renderizar todos os acordes (se necessário)
+    renderAllChords(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.warn(`Container ${containerId} não encontrado`);
+            return;
+        }
 
-      const text = document.createElementNS(svgNS, "text");
-      text.setAttribute("x", x);
-      text.setAttribute("y", y + 3);
-      text.setAttribute("text-anchor", "middle");
-      text.setAttribute("font-size", "14");
-      text.setAttribute("font-weight", "bold");
-      text.textContent = "O";
-      svg.appendChild(text);
+        container.innerHTML = '';
+
+        Object.keys(this.chordShapes).forEach(chordName => {
+            const chordDiv = document.createElement('div');
+            chordDiv.style.display = 'inline-block';
+            chordDiv.style.margin = '10px';
+            chordDiv.style.textAlign = 'center';
+            chordDiv.style.verticalAlign = 'top';
+            
+            const label = document.createElement('div');
+            label.textContent = chordName;
+            label.style.fontWeight = 'bold';
+            label.style.marginBottom = '5px';
+            label.style.color = '#6C63FF';
+            
+            const visualizer = document.createElement('div');
+            visualizer.innerHTML = this.createChordDiagram(chordName, this.chordShapes[chordName]);
+            
+            chordDiv.appendChild(label);
+            chordDiv.appendChild(visualizer);
+            container.appendChild(chordDiv);
+        });
     }
-
-    // "X" para cordas não tocadas
-    if (pos.length === 0) {
-      const y = marginTop - 15;
-      
-      const text = document.createElementNS(svgNS, "text");
-      text.setAttribute("x", x);
-      text.setAttribute("y", y + 3);
-      text.setAttribute("text-anchor", "middle");
-      text.setAttribute("font-size", "14");
-      text.setAttribute("font-weight", "bold");
-      text.textContent = "X";
-      svg.appendChild(text);
-    }
-  }
-
-  // ==========================
-  // BOLINHAS ABAIXO DO BRAÇO
-  // ==========================
-  const legendY = marginTop + usableHeight + 30;
-
-  for (let i = 0; i < numStrings; i++) {
-    const pos = shape[i];
-    if (!pos || pos.length === 0) continue;
-
-    const [fret, finger, tonicFlag] = pos;
-    const x = marginLeft + i * stringSpacing;
-
-    const circle = document.createElementNS(svgNS, "circle");
-    circle.setAttribute("cx", x);
-    circle.setAttribute("cy", legendY);
-    circle.setAttribute("r", 6);
-    circle.setAttribute("fill", tonicFlag === "T" ? "darkblue" : "black");
-    svg.appendChild(circle);
-
-    const text = document.createElementNS(svgNS, "text");
-    text.setAttribute("x", x);
-    text.setAttribute("y", legendY + 15);
-    text.setAttribute("text-anchor", "middle");
-    text.setAttribute("font-size", "9");
-    text.textContent = fret === 0 ? "solta" : `casa ${fret}`;
-    svg.appendChild(text);
-  }
-
-  /*/ ==========================
-  // Nome do acorde
-  // ==========================
-  const chordText = document.createElementNS(svgNS, "text");
-  chordText.setAttribute("x", width / 2);
-  chordText.setAttribute("y", height - 10);
-  chordText.setAttribute("text-anchor", "middle");
-  chordText.setAttribute("font-size", "16");
-  chordText.setAttribute("font-weight", "bold");
-  chordText.textContent = chordName;
-  svg.appendChild(chordText);
-*/
-  container.appendChild(svg);
 }
 
-// ==========================
-// Função para mostrar lista de acordes
-// ==========================
-function renderAllChords() {
-  const chords = [
-    "C", "D", "E", "F", "G", "A", "B",
-    "Cm", "Dm", "Em", "Fm", "Gm", "Am", "Bm",
-    "C7", "D7", "E7", "F7", "G7", "A7", "B7",
-    "Cmaj7", "Dmaj7", "Emaj7", "Fmaj7", "Gmaj7", "Amaj7",
-    "Cm7", "Dm7", "Em7", "Fm7", "Gm7", "Am7", "Bm7",
-    "Csus2", "Dsus2", "Esus2", "Gsus2", "Asus2",
-    "Csus4", "Dsus4", "Esus4", "Gsus4", "Asus4",
-    "C5", "D5", "E5", "G5", "A5",
-    "C6", "D6", "E6", "G6", "A6",
-    "C9", "D9", "E9", "G9", "A9"
-  ];
+// Inicialização quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', () => {
+    window.chordVisualizer = new ChordVisualizer();
+    
+    // Adiciona alguns estilos para o quiz
+    const style = document.createElement('style');
+    style.textContent = `
+        .quiz-option {
+            background: var(--primary, #6C63FF);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            margin: 5px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+        
+        .quiz-option:hover:not(:disabled) {
+            background: var(--primary-dark, #5a52e0);
+            transform: translateY(-2px);
+        }
+        
+        .quiz-option:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .quiz-option.correct {
+            background: var(--success, #4CAF50) !important;
+        }
+        
+        .quiz-option.incorrect {
+            background: var(--danger, #F44336) !important;
+        }
+        
+        #quiz-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        #quiz-feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .correct-feedback {
+            color: var(--success, #4CAF50) !important;
+        }
+        
+        .incorrect-feedback {
+            color: var(--danger, #F44336) !important;
+        }
+        
+        #new-quiz-btn {
+            background: var(--primary, #6C63FF);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        #new-quiz-btn:hover {
+            background: var(--primary-dark, #5a52e0);
+        }
+        
+        #chord-select {
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid var(--primary, #6C63FF);
+            border-radius: 8px;
+            background: white;
+            color: #333;
+            margin-bottom: 15px;
+            width: 200px;
+        }
+        
+        #quiz-chord-visualizer, #chord-visualizer {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 320px;
+        }
+    `;
+    document.head.appendChild(style);
+});
 
-  const container = document.getElementById('chordsContainer');
-  container.innerHTML = '';
-
-  chords.forEach(chord => {
-    const chordDiv = document.createElement('div');
-    chordDiv.style.display = 'inline-block';
-    chordDiv.style.margin = '10px';
-    chordDiv.style.textAlign = 'center';
-    chordDiv.id = `chord-${chord}`;
-    
-    const label = document.createElement('div');
-    label.textContent = chord;
-    label.style.fontWeight = 'bold';
-    label.style.marginBottom = '5px';
-    
-    chordDiv.appendChild(label);
-    container.appendChild(chordDiv);
-    
-    renderChord(`chord-${chord}`, chord);
-  });
+// Funções globais para compatibilidade (se necessário)
+function renderChord(containerId, chordName) {
+    if (window.chordVisualizer && window.chordVisualizer.chordShapes[chordName]) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = window.chordVisualizer.createChordDiagram(chordName, window.chordVisualizer.chordShapes[chordName]);
+        }
+    }
 }
 
-// Inicializar quando a página carregar
-window.onload = renderAllChords;
+function generateQuiz() {
+    if (window.chordVisualizer) {
+        window.chordVisualizer.generateQuiz();
+    }
+}
+
+// Exemplo: Tocar acorde quando clicar no diagrama
+function playChordFromVisualizer(chordNotes) {
+    if (window.playChord) {
+        window.playChord(chordNotes);
+    }
+}
+
+// Exemplo: Tocar nota individual
+function playNoteFromFret(note) {
+    if (window.playNote) {
+        window.playNote(note);
+    }
+}
+
