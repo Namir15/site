@@ -64,6 +64,44 @@
                 </div>
             </section>
 
+            <!-- Seção MIDI Player Corrigida -->
+            <section class="midi-section">
+                <h2 class="section-title">🎵 Biblioteca de Músicas</h2>
+                
+                <div class="search-container">
+                    <input type="text" id="midi-search" placeholder="Buscar música...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="midi-library">
+                    <ul id="midi-list">
+                        <li class="loading-item">Carregando músicas...</li>
+                    </ul>
+                </div>
+                
+                <div class="midi-controls">
+                    <button id="play-midi" class="control-btn" disabled>
+                        <i class="fas fa-play"></i> Tocar
+                    </button>
+                    <button id="pause-midi" class="control-btn" disabled>
+                        <i class="fas fa-pause"></i> Pausar
+                    </button>
+                    <button id="stop-midi" class="control-btn" disabled>
+                        <i class="fas fa-stop"></i> Parar
+                    </button>
+                    
+                    <div class="volume-control">
+                        <i class="fas fa-volume-up volume-icon"></i>
+                        <input type="range" id="midi-volume" min="0" max="100" value="80">
+                    </div>
+                </div>
+                
+                <div class="player-info">
+                    <div id="current-track" class="track-info">Nenhuma música selecionada</div>
+                    <div id="player-status" class="status-message">Pronto para tocar</div>
+                </div>
+            </section>
+
             <section class="modules-section">
                 <h2 class="section-title">Aulas de Violão</h2>
                 <div class="modules-container">
@@ -144,41 +182,39 @@
                         </select>
                     </div>
                 </div>
-            </section>                                                                                                                                 
+            </section>
 
             <section class="exercises-section">
                 <div class="exercise-tabs">
                     <div class="tab active" data-tab="quiz">Quiz de Acordes</div>
-                    
                 </div>
                 
                 <div class="exercise-content">
                     <div class="quiz-container active" id="quizTab">
                         <div class="quiz-header">
                             <!-- Seção do Quiz -->
-    <section id="quiz-section">
-      <h2>Quiz de Acordes</h2>
-      <p id="quiz-instruction">Qual é o acorde mostrado?</p>
+                            <section id="quiz-section">
+                                <h2>Quiz de Acordes</h2>
+                                <p id="quiz-instruction">Qual é o acorde mostrado?</p>
 
-      <div id="quiz-container">
-        <div id="quiz-chord-visualizer"></div>
-        <div id="quiz-options"></div>
-      </div>
+                                <div id="quiz-container">
+                                    <div id="quiz-chord-visualizer"></div>
+                                    <div id="quiz-options"></div>
+                                </div>
 
-      <button id="new-quiz-btn">Novo Quiz</button>
-      <p id="quiz-feedback"></p>
-    </section>
+                                <button id="new-quiz-btn">Novo Quiz</button>
+                                <p id="quiz-feedback"></p>
+                            </section>
 
-    <!-- Visualizador de Acordes -->
-    <section id="chord-section">
-      <h2>Visualizador de Acordes</h2>
-      <select id="chord-select"></select>
-      <div id="chord-visualizer"></div>
-    </section>
-   
-                   
-                
-                
+                            <!-- Visualizador de Acordes -->
+                            <section id="chord-section">
+                                <h2>Visualizador de Acordes</h2>
+                                <select id="chord-select"></select>
+                                <div id="chord-visualizer"></div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section class="resources-section">
@@ -216,9 +252,7 @@
                     </div>
                 </div>
             </section>
-            <!-- Adicione esta seção após a section de exercícios -->
-                </section>
-            <!-- Adicione esta seção após a section de exercícios -->
+
             <section class="scale-section" id="scale-section">
                 <h2 class="section-title">🎸 Explorer de Escalas</h2>
                 
@@ -286,8 +320,6 @@
                     </div>
                 </div>
             </section>
-        
-
         </main>
 
         <footer>
@@ -333,9 +365,19 @@
         <button class="install-btn" id="installAppButton">Instalar</button>
     </div>
 
-    <script src="chord-visualizer.js"></script>
-    <script src="scale-visualizer.js"></script>
-    <script src="app.js"></script>
-     
+<!-- NO FINAL DO BODY -->
+<!-- TENTE ESTA CDN PRINCIPAL -->
+<script src="https://cdn.jsdelivr.net/npm/midijs@0.3.0/lib/MIDI.min.js"></script>
+
+<!-- FALLBACK 1 -->
+<script>window.MIDI || document.write('<script src="https://cdn.rawgit.com/mudcube/MIDI.js/edfa90f2/build/MIDI.min.js"><\/script>')</script>
+
+<!-- FALLBACK 2 -->
+<script>window.MIDI || document.write('<script src="https://unpkg.com/midijs@0.3.0/lib/MIDI.min.js"><\/script>')</script>
+
+<script src="js/midi-player.js"></script>
+<script src="chord-visualizer.js"></script>
+<script src="scale-visualizer.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

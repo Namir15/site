@@ -1842,3 +1842,218 @@ footer {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
 }
+
+/* Seção MIDI Player */
+.midi-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .midi-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .control-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #midi-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .midi-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.3s;
+        }
+
+        .midi-item:last-child {
+            border-bottom: none;
+        }
+
+        .midi-item:hover {
+            background: var(--hover-color);
+        }
+
+        .midi-item.active {
+            background: var(--primary-light);
+        }
+
+        .play-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .play-btn:hover {
+            background: var(--success-dark);
+        }
+
+        .play-btn.playing {
+            background: var(--warning-color);
+        }
+
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-message.loading {
+            background: #cce7ff;
+            color: #004085;
+            border: 1px solid #b3d7ff;
+        }
+
+        .status-message.playing {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .midi-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .midi-icon {
+            color: var(--primary-color);
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        #midi-search {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        /* Melhorias para o MIDI Player */
+.midi-path {
+    font-size: 0.7rem;
+    color: #888;
+    display: block;
+    margin-top: 2px;
+}
+
+#midi-search-info {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.midi-item.active {
+    background: linear-gradient(135deg, #6C63FF, #36D1DC) !important;
+    color: white;
+}
+
+.midi-item.active .midi-path {
+    color: rgba(255,255,255,0.8);
+}
+
+.play-btn.playing {
+    background: #FF6584 !important;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+/* Estados do MIDI Player */
+.status-message.warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.play-btn:disabled {
+    background: #ccc !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.play-btn:disabled:hover {
+    transform: none !important;
+}
+
+.midi-item.active {
+    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+    color: white;
+}
+
+.midi-item.active .midi-path {
+    color: rgba(255, 255, 255, 0.8);
+}
