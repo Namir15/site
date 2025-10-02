@@ -70,23 +70,30 @@ header {
     gap: 15px;
 }
 
+
 .icon-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     transition: var(--transition);
+    outline: none;
+}
+
+.icon-btn:focus {
+    box-shadow: 0 0 0 3px var(--accent);
 }
 
 .icon-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.08);
 }
 
 /* Main Content */
@@ -184,7 +191,7 @@ main {
     font-size: 1.2rem;
 }
 
-/* Modules Section */
+
 .modules-section {
     margin-bottom: 1.5rem;
 }
@@ -260,27 +267,36 @@ main {
     color: var(--text-light);
 }
 
+
 .start-btn {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 10px 22px;
+    border-radius: 24px;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(108,99,255,0.08);
+    outline: none;
+}
+
+.start-btn:focus {
+    box-shadow: 0 0 0 3px var(--accent);
 }
 
 .start-btn:hover:not(:disabled) {
     background: #5a52e0;
+    transform: translateY(-2px);
 }
 
 .start-btn:disabled {
     background: #CCCCCC;
     cursor: not-allowed;
+    opacity: 0.7;
 }
 
-/* Video Player */
+
 .video-section {
     background: white;
     border-radius: var(--border-radius);
@@ -292,7 +308,7 @@ main {
 .video-container {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    padding-top: 56.25%; 
     background: #000;
 }
 
@@ -342,7 +358,7 @@ main {
     gap: 5px;
 }
 
-/* Interactive Exercises */
+
 .exercises-section {
     margin-bottom: 1.5rem;
 }
@@ -364,9 +380,11 @@ main {
     white-space: nowrap;
 }
 
+
 .tab.active {
     background: var(--primary);
     color: white;
+    box-shadow: 0 2px 8px rgba(108,99,255,0.08);
 }
 
 .exercise-content {
@@ -553,12 +571,17 @@ main {
     color: var(--primary);
 }
 
+
+.outline-btn:focus {
+    box-shadow: 0 0 0 3px var(--accent);
+}
 .outline-btn:hover {
     background: var(--primary);
     color: white;
+    transform: translateY(-2px);
 }
 
-/* ===== VISUALIZADOR DE ACORDES ===== */
+
 .chord-visualizer {
     background: white;
     border-radius: var(--border-radius);
@@ -852,7 +875,7 @@ main {
     height: 20px;
 }
 
-/* Resources Section */
+
 .resources-section {
     margin-bottom: 1.5rem;
 }
@@ -896,27 +919,35 @@ main {
     margin-bottom: 1rem;
 }
 
+
 .download-btn {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-size: 1rem;
     cursor: pointer;
     transition: var(--transition);
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 7px;
+    box-shadow: 0 2px 8px rgba(108,99,255,0.08);
+    outline: none;
+}
+
+.download-btn:focus {
+    box-shadow: 0 0 0 3px var(--accent);
 }
 
 .download-btn:hover {
     background: #5a52e0;
+    transform: translateY(-2px);
 }
 
-/* Footer */
+
 footer {
     background: var(--dark);
     color: white;
@@ -950,14 +981,21 @@ footer {
     gap: 5px;
 }
 
+
 .footer-link {
     color: #CCCCCC;
     text-decoration: none;
     transition: var(--transition);
+    outline: none;
 }
 
+.footer-link:focus {
+    box-shadow: 0 0 0 2px var(--accent);
+    outline: none;
+}
 .footer-link:hover {
     color: white;
+    text-decoration: underline;
 }
 
 .social-links {
@@ -983,7 +1021,7 @@ footer {
     color: #CCCCCC;
 }
 
-/* PWA Installation Prompt */
+
 .install-prompt {
     position: fixed;
     bottom: 20px;
@@ -1018,6 +1056,15 @@ footer {
     border: none;
     padding: 8px 15px;
     border-radius: 20px;
+
+    .resource-card:focus {
+        box-shadow: 0 0 0 3px var(--accent);
+        outline: none;
+    }
+    .resource-card:hover {
+        transform: translateY(-7px) scale(1.03);
+        box-shadow: 0 8px 24px rgba(108,99,255,0.12);
+    }
     font-weight: 600;
     cursor: pointer;
     width: 100%;
@@ -1028,7 +1075,7 @@ footer {
     gap: 5px;
 }
 
-/* Animações do Visualizador */
+
 @keyframes bounce {
     0%, 100% { transform: translate(-50%, -50%) scale(1); }
     50% { transform: translate(-50%, -50%) scale(1.2); }
@@ -1040,7 +1087,7 @@ footer {
     100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-/* Responsive Design */
+
 @media (min-width: 768px) {
     .footer-content {
         flex-direction: row;
@@ -1060,12 +1107,19 @@ footer {
     }
 }
 
-/* Dark Mode */
+
+
 .dark-mode {
     --light: #1E1E2E;
     --dark: #F7F9FC;
     --text: #F7F9FC;
     --text-light: #A0A0A0;
+    --accent: #36D1DC;
+    --primary: #6C63FF;
+    --secondary: #FF6584;
+    --success: #4CAF50;
+    --warning: #FFC107;
+    --danger: #F44336;
 }
 
 .dark-mode header {
@@ -1100,7 +1154,7 @@ footer {
     color: var(--text-light);
 }
 
-/* Animações para as notificações */
+
 @keyframes slideIn {
     from { 
         transform: translateX(100%); 
@@ -1112,7 +1166,7 @@ footer {
     }
 }
 
-/* Melhorias para o visualizador de acordes */
+
 .finger {
     transition: all 0.3s ease;
 }
@@ -1121,13 +1175,13 @@ footer {
     transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* Efeitos de loading */
+
 .loading {
     opacity: 0.7;
     pointer-events: none;
 }
 
-/* Melhorias na responsividade */
+
 @media (max-width: 768px) {
     .chord-visualizer {
         padding: 1rem;
@@ -1142,9 +1196,9 @@ footer {
     }
 }
 
-/* =======================
-   Estilos gerais
-======================= */
+
+   
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -1154,11 +1208,6 @@ body {
   text-align: center;
 }
 
-/*header {
-  
-  padding: 20px;
-}
-*/
 header h1 {
   margin: 0;
   font-size: 2em;
@@ -1170,22 +1219,9 @@ main {
   margin: auto;
 }
 
-section {
-  margin-bottom: 40px;
-  padding: 20px;
-  /*background: white;*/
-  border-radius: 12px;
-  /*box-shadow: 0 4px 10px rgba(0,0,0,0.1);*/
-}
+/* ...existing code... */
 
-footer {
- /* background: #222;
-  color: #ddd;*/
-  padding: 10px;
-  font-size: 0.9em;
-}
 
-/* =======================
    Quiz
 ======================= */
 #quiz-container {
@@ -1237,13 +1273,7 @@ footer {
   transition: background 0.3s ease;
 }
 
- /*#new-quiz-btn:hover {
-  background: #45a049;
-}*/
-
-/* =======================
-   Visualizador de acordes
-======================= */
+ 
 #chord-select {
   padding: 8px;
   font-size: 1em;
@@ -1254,9 +1284,6 @@ footer {
   margin-top: 10px;
 }
 
-/* =======================
-   Bolinhas do braço do violão
-======================= */
 .fret-dot {
   fill: #ff5722;
   stroke: black;
@@ -1266,9 +1293,7 @@ footer {
 }
 
 
-/* Scale Visualizer Styles - Cordas de Baixo para Cima */
 
-/* Scale Visualizer Styles - Cordas de Baixo para Cima */
 .scale-section {
     background: var(--card-bg);
     border-radius: 15px;
@@ -1347,7 +1372,7 @@ footer {
     border-radius: 10px;
     margin: 20px 0;
     border: 3px solid #5d403700;
-    padding-left: 50px; /* Espaço para os labels das cordas */
+    padding-left: 50px; 
 }
 
 .scale-fretboard {
@@ -1356,8 +1381,7 @@ footer {
     min-width: 800px;
 }
 
-/* Labels das cordas na lateral esquerda */
-/* Scale Visualizer Styles */
+
 .scale-section {
     background: rgba(255, 255, 255, 0);
     border-radius: 10px;
@@ -1478,10 +1502,7 @@ footer {
     gap: 8px;
 }
 
-/* Adicione isso ao seu style.css */
-/* =======================
-   SCALE VISUALIZER - PADRONIZADO
-======================= */
+
 .scale-section {
     background: white;
     border-radius: var(--border-radius);
@@ -1498,17 +1519,27 @@ footer {
     border: 1px solid rgba(108, 99, 255, 0.1);
 }
 
-.control-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    align-items: end;
+
+.control-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    outline: none;
 }
 
-.control-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+.control-btn:focus {
+    box-shadow: 0 0 0 3px var(--accent);
+}
+
+.control-btn:hover:not(:disabled) {
+    background: #5a52e0;
+    color: white;
+    transform: translateY(-2px);
 }
 
 .control-item label {
@@ -1612,6 +1643,15 @@ footer {
     font-weight: bold;
     color: var(--warning);
     background: rgba(0,0,0,0.8);
+
+    .module-card:focus {
+        box-shadow: 0 0 0 3px var(--accent);
+        outline: none;
+    }
+    .module-card:hover {
+        transform: translateY(-7px) scale(1.03);
+        box-shadow: 0 12px 32px rgba(108,99,255,0.12);
+    }
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     text-align: center;
@@ -1860,22 +1900,26 @@ footer {
             flex-wrap: wrap;
         }
 
+
         .control-btn {
-            background: var(--primary-color);
-            color: white;
+            background: #e0e0e0;
+            color: var(--text);
             border: none;
             padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, color 0.3s;
         }
 
-        .control-btn:hover {
-            background: var(--primary-dark);
+        .control-btn:hover:not(:disabled),
+        .control-btn:focus:not(:disabled) {
+            background: #cccccc;
+            color: var(--primary);
         }
 
         .control-btn:disabled {
             background: #ccc;
+            color: #888;
             cursor: not-allowed;
         }
 
@@ -1977,9 +2021,16 @@ footer {
             color: var(--primary-color);
         }
 
+
         .search-container {
             position: relative;
             margin-bottom: 15px;
+        }
+
+        #midi-search:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent);
+            outline: none;
         }
 
         #midi-search {

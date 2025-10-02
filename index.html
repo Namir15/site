@@ -19,14 +19,14 @@
                     <span>Violão Pro</span>
                 </div>
                 <div class="user-actions">
-                    <button class="icon-btn" id="themeToggle">
-                        <i class="fas fa-moon"></i>
+                    <button class="icon-btn" id="themeToggle" aria-label="Alternar tema" role="button">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
                     </button>
-                    <button class="icon-btn" id="notificationsBtn">
-                        <i class="fas fa-bell"></i>
+                    <button class="icon-btn" id="notificationsBtn" aria-label="Notificações" role="button">
+                        <i class="fas fa-bell" aria-hidden="true"></i>
                     </button>
-                    <button class="icon-btn" id="profileBtn">
-                        <i class="fas fa-user"></i>
+                    <button class="icon-btn" id="profileBtn" aria-label="Perfil" role="button">
+                        <i class="fas fa-user" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -80,14 +80,15 @@
                 </div>
                 
                 <div class="midi-controls">
+                    <button onclick="Tone.start()">Desbloquear Áudio</button>
                     <button id="play-midi" class="control-btn" disabled>
-                        <i class="fas fa-play"></i> Tocar
+                        <i class="fas fa-play" aria-hidden="true"></i> <span aria-label="Tocar">Tocar</span>
                     </button>
                     <button id="pause-midi" class="control-btn" disabled>
-                        <i class="fas fa-pause"></i> Pausar
+                        <i class="fas fa-pause" aria-hidden="true"></i> <span aria-label="Pausar">Pausar</span>
                     </button>
                     <button id="stop-midi" class="control-btn" disabled>
-                        <i class="fas fa-stop"></i> Parar
+                        <i class="fas fa-stop" aria-hidden="true"></i> <span aria-label="Parar">Parar</span>
                     </button>
                     
                     <div class="volume-control">
@@ -118,6 +119,7 @@
                                     <span><i class="fas fa-star"></i> 80 pts</span>
                                 </div>
                                 <button class="start-btn">Continuar</button>
+<button class="start-btn" aria-label="Continuar módulo" role="button">Continuar</button>
                             </div>
                         </div>
                     </div>
@@ -150,6 +152,7 @@
                                     <span><i class="fas fa-star"></i> 0 pts</span>
                                 </div>
                                 <button class="start-btn" disabled>Em Breve</button>
+                                <button class="start-btn" disabled aria-label="Em breve" role="button">Em Breve</button>
                             </div>
                         </div>
                     </div>
@@ -227,7 +230,7 @@
                         <h3 class="resource-title">Acordes Básicos</h3>
                         <p class="resource-desc">PDF com diagramas de acordes</p>
                         <button class="download-btn">
-                            <i class="fas fa-download"></i> Baixar
+                            <i class="fas fa-download" aria-hidden="true"></i> <span aria-label="Baixar">Baixar</span>
                         </button>
                     </div>
                     <div class="resource-card">
@@ -237,7 +240,7 @@
                         <h3 class="resource-title">Tablaturas</h3>
                         <p class="resource-desc">Músicas para praticar</p>
                         <button class="download-btn">
-                            <i class="fas fa-download"></i> Baixar
+                            <i class="fas fa-download" aria-hidden="true"></i> <span aria-label="Baixar">Baixar</span>
                         </button>
                     </div>
                     <div class="resource-card">
@@ -247,7 +250,7 @@
                         <h3 class="resource-title">Seu Progresso</h3>
                         <p class="resource-desc">Relatório detalhado</p>
                         <button class="download-btn">
-                            <i class="fas fa-share-alt"></i> Compartilhar
+                            <i class="fas fa-share-alt" aria-hidden="true"></i> <span aria-label="Compartilhar">Compartilhar</span>
                         </button>
                     </div>
                 </div>
@@ -346,7 +349,7 @@
                     <h3 class="footer-title">Baixe o App</h3>
                     <p>Disponível para iOS e Android</p>
                     <button class="install-btn" id="installButton">
-                        <i class="fas fa-download"></i> Instalar App
+                        <i class="fas fa-download" aria-hidden="true"></i> <span aria-label="Instalar App">Instalar App</span>
                     </button>
                 </div>
             </div>
@@ -363,14 +366,21 @@
         </div>
         <p>Instale nosso app para uma experiência melhor, mesmo offline!</p>
         <button class="install-btn" id="installAppButton">Instalar</button>
+<button class="install-btn" id="installAppButton" aria-label="Instalar aplicativo" role="button">Instalar</button>
     </div>
 
 <!-- NO FINAL DO BODY - REMOVA MIDI.js E USE TONE.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<!-- NO FINAL DO BODY -->
+ <script src="https://cdn.jsdelivr.net/gh/grimmdude/MIDI.js@master/js/MIDI/Player.js"></script>
+ 
+
+<!--<script src="https://cdn.jsdelivr.net/npm/midijs@2.0.0/dist/MIDIJS.min.js"></script>-->
+<script src="js/songs.js"></script>
 <script src="js/midi-player.js"></script>
 <script src="chord-visualizer.js"></script>
 <script src="scale-visualizer.js"></script>
 <script src="app.js"></script>
+
 
 
 </body>
