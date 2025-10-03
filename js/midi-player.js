@@ -8,13 +8,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const statusMsg = document.getElementById("player-status");
   const searchInput = document.getElementById("midi-search");
 
+  // 🎶 Lista de músicas
+  const songs = [
+    { name: "Michael", file: "midis/midis/Michael Jackson - Beat It.mid" },
+    { name: "Canon in D - Pachelbel", file: "midis/canon-d.mid" },
+    { name: "Yesterday - Beatles", file: "midis/yesterday.mid" }
+  ];
+
   let currentFile = null;
   let currentLi = null;
 
-  // ⚡ Inicializa o player
-  let player = new MIDI.Player();
-
-  // 🔎 Renderiza lista de músicas
+  // 🔎 Renderiza a lista de músicas
   function renderList(filter = "") {
     midiList.innerHTML = "";
     const filteredSongs = songs.filter(song =>
@@ -40,56 +44,52 @@ document.addEventListener("DOMContentLoaded", function () {
   // 🔍 Busca de músicas
   searchInput.addEventListener("input", e => renderList(e.target.value));
 
-  // 🎼 Seleciona música
+  // 🎼 Seleciona uma música
   function selectSong(song, li) {
     currentFile = song.file;
     currentTrack.textContent = "🎶 " + song.name;
-    statusMsg.className = "status-message loading";
-    statusMsg.textContent = "Carregando...";
+    statusMsg.className = "status-message success";
+    statusMsg.textContent = "Música selecionada";
 
-    // Remove destaque anterior
+    playBtn.disabled = false;
+    pauseBtn.disabled = false;
+    stopBtn.disabled = false;
+
+    // Destaca a música selecionada
     if (currentLi) currentLi.classList.remove("active");
     li.classList.add("active");
     currentLi = li;
-
-    // Carrega o arquivo MIDI
-    player.loadFile(currentFile, () => {
-      statusMsg.className = "status-message success";
-      statusMsg.textContent = "🎵 Pronto para tocar";
-
-      playBtn.disabled = false;
-      pauseBtn.disabled = false;
-      stopBtn.disabled = false;
-    });
   }
 
   // ▶ Play
   playBtn.addEventListener("click", () => {
     if (!currentFile) return;
-    player.start();
+    MIDIjs.play(currentFile);
     statusMsg.className = "status-message playing";
     statusMsg.textContent = "▶ Tocando...";
+    // Destaca a música
     if (currentLi) currentLi.classList.add("active");
   });
 
   // ⏸ Pause
   pauseBtn.addEventListener("click", () => {
-    player.pause();
+    MIDIjs.pause();
     statusMsg.className = "status-message success";
     statusMsg.textContent = "⏸ Pausado";
   });
 
   // ⏹ Stop
   stopBtn.addEventListener("click", () => {
-    player.stop();
+    MIDIjs.stop();
     statusMsg.className = "status-message success";
     statusMsg.textContent = "⏹ Parado";
+    // Remove destaque
     if (currentLi) currentLi.classList.remove("active");
   });
 
   // 🔊 Volume
   volumeSlider.addEventListener("input", () => {
     let vol = volumeSlider.value / 100;
-    MIDI.Player.setVolume(vol);
+    MIDIjs.setVolume(0, vol);
   });
 });
